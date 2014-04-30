@@ -1,0 +1,246 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<%
+var name = session.get("username");
+if(name===null){
+    response.sendRedirect("login.jag");
+}
+require("template/head.jag");
+%>
+
+
+</head>
+<body>
+	<noscript>
+		<div class="something-wrong">
+			<div class="title">JavaScript is disabled on your browser</div>
+			<div class="content">Please enable JavaScript or upgrade to a
+				JavaScript-capable browser to use WSO2 Products.</div>
+		</div>
+	</noscript>
+	<div id="dcontainer"></div>
+	<script type="text/javascript" src="../resources/js/dialog.js"></script>
+	<script type="text/javascript" src="../resources/js/jquery-ui.js"></script>
+	<!-- JS imports for collapsible menu -->
+	<script src="../resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+	<script src="../resources/js/animation-min.js" type="text/javascript"></script>
+	<script src="../resources/js/template.js" type="text/javascript"></script>
+	<script src="../resources/js/yahoo-min.js" type="text/javascript"></script>
+	<script src="../resources/js/selector-min.js" type="text/javascript"></script>
+
+<!-- 	<script type="text/javascript" src="resources/js/jquery-ui.js"></script> -->
+<!-- 	<link rel="stylesheet" href="resources/css/jquery-ui.css"> -->
+
+            <%
+include("../controller/base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin")
+};
+
+var params = request.getAllParameters("UTF-8");
+var list = params.WSO2_QAP_TEST_CASE_ID;
+
+
+
+var url_getTestcasedetails=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/view/testcase_by_id/"+list;
+var data_testcase = get(url_getTestcasedetails,"",optionalHeaders);
+var obj_testcase=parse(data_testcase.data);
+var list_testcase=obj_testcase.WSO2_QAP_TEST_CASECollection.WSO2_QAP_TEST_CASE;
+
+%>
+
+	<script type="text/javascript">
+	$.ajax({
+		  url: "../controller/getArtifactDropdown.jag",
+		  context: document.body
+		}).done(function(data) {
+
+			document.getElementById("WSO2_QAP_TEST_CASE_ARTIFACT").innerHTML = data;
+			$('#WSO2_QAP_TEST_CASE_ARTIFACT').val("<%=list_testcase.WSO2_QAP_ARTIFACT_ID %>");
+		}).fail(function() {
+
+		  });
+	</script>
+
+	<script type="text/javascript">
+	$.ajax({
+		  url: "../controller/getAutotestclassDropdown.jag",
+		  context: document.body
+		}).done(function(data) {
+
+			document.getElementById("WSO2_QAP_TEST_CASE_AUTOMATIONTESTCASE").innerHTML = data;
+			$('#WSO2_QAP_TEST_CASE_AUTOMATIONTESTCASE').val("<%=list_testcase.WSO2_QAP_AUTO_TEST_CLASS_ID %>");
+		}).fail(function() {
+
+		  });
+	</script>
+
+
+
+
+
+
+	<table id="main-table" border="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td id="header" colspan="3">
+				<%
+require("template/header_div.jag");
+%>
+</td>
+</tr>
+<tr>
+<%
+require("template/product_vertical_menu.jag");
+%>
+<%
+require("template/product_menu_panel.jag");
+%>
+
+
+<td id="middle-content">
+    <table id="content-table" border="0" cellspacing="0">
+        <tbody>
+            <tr>
+                <td id="page-header-links">
+                    <table class="page-header-links-table" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td class="breadcrumbs">
+                                    <table class="breadcrumb-table" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div id="breadcrumb-div">
+                                                        
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <td class="page-header-help"><a href="./docs/userguide.html"
+                                    target="_blank">Help</a></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+
+<tr>
+    <td id="body"><img src="../admin/images/1px.gif" width="735px"
+        height="1px">
+
+    <div id="middle">
+            <h2>Edit Test Case</h2>
+
+            <div id="workArea">
+                <form name="add_testcase" method="post"  action="../controller/editTestcase.jag"
+                    >
+                    <table class="styledLeft" id="archiveTbl">
+
+                        <input type="hidden" id="WSO2_QAP_TEST_CASE_ID" name="WSO2_QAP_TEST_CASE_ID" value="<%=list_testcase.WSO2_QAP_TEST_CASE_ID%>">
+                        <tbody>
+                            <tr class="tableEvenRow">
+                                <td class="formRow">Test Case name<font color="red">*</font>
+                                </td>
+                                <td><input type="text" id="WSO2_QAP_TEST_CASE_NAME" name="WSO2_QAP_TEST_CASE_NAME"
+                                      value="<%=list_testcase.WSO2_QAP_TEST_CASE_NAME %>" onchange="">
+                                </td>
+                            </tr>
+                            <tr class="tableOddRow">
+                                <td class="formRow">Auto test class availability<font color="red">*</font>
+                                </td>
+
+                                <td><select  id="WSO2_QAP_TEST_CASE_STATUS" name="WSO2_QAP_TEST_CASE_STATUS" value="<%=list_testcase.WSO2_QAP_AUTOMATION_STATUS %>">
+                                    <option   value="Yes">Yes</option>
+                                    <option   value="No">No</option>
+
+                                </select>
+                                <script type="text/javascript">
+                                    $("#WSO2_QAP_TEST_CASE_STATUS [value='<%=list_testcase.WSO2_QAP_AUTOMATION_STATUS %>']").attr("selected","selected");
+                                </script>
+                            </tr>
+                            <tr class="tableEvenRow">
+                                <td class="formRow" >Description<font color="red">*</font>
+                                </td>
+
+                                <td>
+                                    <textarea rows="4" cols="50" name="WSO2_QAP_TEST_CASE_DESCRIPTION"  id="WSO2_QAP_TEST_CASE_DESCRIPTION" >
+                                    </textarea>
+                                </td>
+                                <script type="text/javascript">
+                                    document.getElementById("WSO2_QAP_TEST_CASE_DESCRIPTION").value="<%=list_testcase.WSO2_QAP_DESCRIPTION %>";
+                                </script>
+                            </tr>
+                            <tr class="tableOddRow">
+                                <td class="formRow">Artifact name<font color="red">*</font></td>
+                                <td class="formRow">
+                                <select name="WSO2_QAP_TEST_CASE_ARTIFACT" id="WSO2_QAP_TEST_CASE_ARTIFACT">
+
+                                </select>
+
+
+                                <input type="button" value="Create new Artifact" onclick="window.open('add_artifact.jag')" target="_blank">
+                                </td>
+
+                            </tr>
+                            <tr class="tableEvenRow">
+                                <td class="formRow">Auto Test case<font color="red">*</font>
+                                </td>
+                                <td>
+                                <select  id="WSO2_QAP_TEST_CASE_AUTOMATIONTESTCASE" name="WSO2_QAP_TEST_CASE_AUTOMATIONTESTCASE">
+
+                                </select>
+
+                                <input type="button" value="Create new Auto Test case" onclick="window.open('add_autotestclass.jag')" target="_blank">
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <table class="styledLeft">
+                        <tbody>
+                            <tr>
+                                <td class="buttonRow" colspan="2"><input name="upload"
+                                    type="submit" class="button" value=" Submit "
+                                    onclick="submitForm();"> <input type="button"
+                                        class="button"
+                                        onclick="location.href='testcase_home.jag';"
+                                        value=" Cancel ">
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </td>
+</tr>
+</tbody>
+</table>
+</td>
+
+</tr>
+<tr>
+<%
+require("template/footer.jag")
+%>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

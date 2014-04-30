@@ -1,0 +1,38 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+
+var list = params.WSO2_QAP_SAMPLE_ID;
+var param = "";
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+if(!(list instanceof Array)){
+
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_DataService/delete/samples/"+list;
+
+    del(url, param, optionalHeaders, "json", function (data, xhr) {
+        log("Response received");
+    } );
+
+}
+else{
+
+    for (var i=0;i<list.length;i++){
+        var url = SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_DataService/delete/samples/"+list[i];
+
+        del(url, param, optionalHeaders, "json", function (data, xhr) {
+            log("Response received");
+        } );
+
+
+    }
+
+}
+
+response.sendRedirect("../view/sample_home.jag");
+
+%>

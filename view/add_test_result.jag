@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<%
+var name = session.get("username");
+if(name===null){
+             response.sendRedirect("login.jag");
+           }
+           require("template/head.jag");
+           %>
+</head>
+<body>
+  <noscript>
+    <div class="something-wrong">
+      <div class="title">JavaScript is disabled on your browser</div>
+      <div class="content">Please enable JavaScript or upgrade to a
+        JavaScript-capable browser to use WSO2 Products.</div>
+    </div>
+  </noscript>
+  <div id="dcontainer"></div>
+  <script type="text/javascript" src="resources/js/dialog.js"></script>
+  <!-- JS imports for collapsible menu -->
+  <script src="resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+  <script src="resources/js/animation-min.js" type="text/javascript"></script>
+  <script src="resources/js/template.js" type="text/javascript"></script>
+  <script src="resources/js/yahoo-min.js" type="text/javascript"></script>
+  <script src="resources/js/selector-min.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+  $.ajax({
+      url: "../controller/getTestCaseDropdown.jag",
+      context: document.body
+    }).done(function(data) {
+
+      document.getElementById("WSO2_QAP_TEST_CASE").innerHTML = data;
+    }).fail(function() {
+      alert("fail");
+      });
+  </script>
+    
+  <table id="main-table" border="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td id="header" colspan="3"><%
+        require("template/header_div.jag");
+        %>
+        </td>
+      </tr>
+      <tr>
+        <% 
+        require("template/product_vertical_menu.jag");
+        %>
+        <%
+        require("template/product_menu_panel.jag");
+        %>
+
+
+        <td id="middle-content">
+          <table id="content-table" border="0" cellspacing="0">
+                       <tbody>
+                          <tr>
+                             <td id="page-header-links">
+                                <table class="page-header-links-table" cellspacing="0">
+                                   <tbody>
+                                      <tr>
+                                         <td class="breadcrumbs">
+                                            <table class="breadcrumb-table" cellspacing="0">
+                                               <tbody>
+                                                  <tr>
+                                                     <td>
+                                                        <div id="breadcrumb-div">
+                                                           
+                                                        </div>
+                                                      </td>
+                                                  </tr>
+                                              </tbody>
+                                            </table>
+                                         </td>
+                                        <td class="page-header-help"><a href="https://localhost:9443/carbon/webapp-list/docs/userguide.jag" target="_blank">Help</a></td>
+                                      </tr>
+                                   </tbody>
+                                </table>
+                              </td>
+                           </tr>
+                 <tr>
+                  <td id="body">
+                    <img src="resources/images/1px.gif" width="735px" height="1px"> 
+                    
+                    <script type="text/javascript">
+                                setCookie('current-breadcrumb', 'manage_menu,webapps_menu,webapps_list_menu#');
+                                
+                    </script> 
+
+                    <script type="text/javascript" src="../resources/js/ui_validator.js"></script>
+                                
+                    <div id="middle">
+                    <h2>Add Test Result</h2>
+                      <div id="workArea">
+
+                        <form name="add_test_result"
+                          action="../controller/addTestResult.jag" method="post"
+                          onsubmit="return validateTextInput();return false;">
+                           <table class="styledLeft" id="archiveTbl">
+                              <tbody>
+                              <tr class="tableOddRow">
+                                <td class="formRow">Test Case Name<span class="required">*</span>
+                                </td>
+                                <td align="left"><select name="WSO2_QAP_TEST_CASE" id="WSO2_QAP_TEST_CASE">
+                                </select>
+                                </td>
+                              </tr>
+                              <tr class="tableEvenRow">
+                                <td class="formRow">Test Status</td>
+                                <td class="formRow">
+                                <select name="WSO2_QAP_TEST_STATUS" id="WSO2_QAP_TEST_STATUS">
+                                  <option value="IN PROGRESS">IN PROGRESS</option>
+                                  <option value="PASSED">PASSED</option>
+                                  <option value="FAILED">FAILED</option>
+                                  </select>
+                                </td>
+                              </tr>
+                              <tr class="tableOddRow">
+                                <td class="formRow">Automation Test Result</td>
+                                <td class="formRow">
+                                <select name="WSO2_QAP_AUTOMATION_TEST_RESULT" id="WSO2_QAP_AUTOMATION_TEST_RESULT">
+                                  <option value="NO TESTS">NO TESTS</option>
+                                  <option value="PASSED">PASSED</option>
+                                  <option value="FAILED">FAILED</option>
+                                  <option value="YET TO RUN">YET TO RUN</option>
+                                  </select>
+                                </td>
+                               </tr>
+                                <tr class="tableEvenRow">
+                                <td class="formRow">Tested By</td>
+                                <td class="formRow"><input id="WSO2_QAP_TESTED_BY"
+                                  name="WSO2_QAP_TESTED_BY" class="text-not-empty" class="longInput" value="">
+                                </td>
+                              </tr>
+                              </tbody>
+                             </table>
+
+                           <table class="styledLeft">
+                            <tbody>
+                              <tr>
+                                <td class="buttonRow"><input class="button" value="Save" type="submit"> 
+                                <input class="button" value="Cancel"
+                                    onclick="location.href = 'products_home.jag'"
+                                    type="button">
+                                </td>
+                              </tr>
+                            </tbody>
+                           </table>
+                        </form>
+                      </div>
+                    </div>
+                  </td>
+               </tr>
+              </tbody>
+           </table>
+          </td>
+       </tr>
+      <tr>
+        <% 
+        require("template/footer.jag")
+        %>
+      </tr>
+    </tbody>
+   </table>
+  </body>
+</html>

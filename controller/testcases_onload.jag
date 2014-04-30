@@ -1,0 +1,148 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/view/testcase";
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var data = get(url,"",optionalHeaders);
+var obj = parse(data.data);
+
+var list = obj.WSO2_QAP_TEST_CASECollection.WSO2_QAP_TEST_CASE;
+
+
+
+
+if(!(list instanceof Array)){
+
+    var url1=SERVICE_SECURE_ROOT+"WSO2_QAP_ARTIFACT_DataService/view/artifacts_with_id"+list.WSO2_QAP_ARTIFACT_ID;
+    var para1="";
+
+    var res1=get(url1,para1,optionalHeaders);
+    var object1=parse(res1.data);
+    var des1=object1.WSO2_QAP_ARTIFACTCollection.WSO2_QAP_ARTIFACT;
+
+     var url2=SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/view/autotestclass_with_id";
+     var para2="WSO2_QAP_AUTO_TEST_CLASS_ID="+list.WSO2_QAP_AUTO_TEST_CLASS_ID ;
+
+     var res2=get(url2,para2,optionalHeaders);
+     var object2=parse(res2.data);
+     var des2=object2.WSO2_QAP_AUTO_TEST_CLASSCollection.WSO2_QAP_AUTO_TEST_CLASS;
+
+      
+
+    print('<tr valign="middle">');
+    print(' <td style="text-align:center; !important" width="10px">');
+    print('    <input name="WSO2_QAP_TEST_CASE_ID" value="'+list.WSO2_QAP_TEST_CASE_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+    print(' </td>');
+
+    print(' <td>');
+    var link = "view_testcase.jag?data="+encodeURIComponent(stringify(list.WSO2_QAP_TEST_CASE_ID));
+    print('<a href="'+link+'">');
+    print("&emsp;&emsp;&emsp;");
+    print(list.WSO2_QAP_TEST_CASE_NAME );
+    print('</a>');
+    print('</td>');
+    print(' <td>');
+
+    print("&emsp;&emsp;&emsp;");
+    print(list.WSO2_QAP_DESCRIPTION );
+    print('</a>');
+    print('</td>');
+
+    print(' <td>');
+
+    print("&emsp;&emsp;&emsp;");
+    print(list.WSO2_QAP_AUTOMATION_STATUS );
+    print('</a>');
+    print('</td>')
+
+    print(' <td>');
+
+    print("&emsp;&emsp;&emsp;");
+    print(des1.WSO2_QAP_ARTIFACT_NAME );
+    print('</a>');
+    print('</td>');
+
+    print(' <td>');
+    print("&emsp;&emsp;&emsp;");
+    print(des2.WSO2_QAP_AUTO_TEST_CLASS_NAME);
+    print('</a>');
+    print('</td>');
+
+    print('</tr>');
+
+}
+else{
+
+for (var i=0;i<list.length;i++)
+{
+    var url1=SERVICE_SECURE_ROOT+"WSO2_QAP_ARTIFACT_DataService/view/artifacts_with_id/"+list[i].WSO2_QAP_ARTIFACT_ID ;
+    var para1="";
+    var res1=get(url1,para1,optionalHeaders);
+    var object1=parse(res1.data);
+    var des1=object1.WSO2_QAP_ARTIFACTCollection.WSO2_QAP_ARTIFACT;
+
+
+
+     var url2=SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/view/autotestclass_with_id";
+     var para2="WSO2_QAP_AUTO_TEST_CLASS_ID="+list[i].WSO2_QAP_AUTO_TEST_CLASS_ID ;
+
+     var res2=get(url2,para2,optionalHeaders);
+     var object2=parse(res2.data);
+     var des2=object2.WSO2_QAP_AUTO_TEST_CLASSCollection.WSO2_QAP_AUTO_TEST_CLASS;
+     
+
+   
+    print('<tr valign="middle">');
+    print(' <td style="text-align:center; !important" width="10px">');
+    print('    <input name="WSO2_QAP_TEST_CASE_ID" value="'+list[i].WSO2_QAP_TEST_CASE_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+    print(' </td>');
+
+    print(' <td>');
+    var link = "view_testcase.jag?data="+encodeURIComponent(stringify(list[i].WSO2_QAP_TEST_CASE_ID));
+    print('<a href="'+link+'">');
+    print("&emsp;&emsp;&emsp;");
+    print(list[i].WSO2_QAP_TEST_CASE_NAME );
+    print('</a>');
+    print('</td>');
+    print(' <td>');
+
+    print("&emsp;&emsp;&emsp;");
+    print(list[i].WSO2_QAP_DESCRIPTION );
+    print('</a>');
+    print('</td>');
+
+    print(' <td>');
+
+    print("&emsp;&emsp;&emsp;");
+    print(list[i].WSO2_QAP_AUTOMATION_STATUS );
+    print('</a>');
+    print('</td>')
+
+    print(' <td>');
+    var link = "artifact_dashboard.jag?data="+encodeURIComponent(stringify(list[i].WSO2_QAP_ARTIFACT_ID));
+    print('<a href="'+link+'">');
+    print("&emsp;&emsp;&emsp;");
+    print(des1.WSO2_QAP_ARTIFACT_NAME );
+    print('</a>');
+    print('</td>');
+
+    print(' <td>');
+
+    print("&emsp;&emsp;&emsp;");
+    print(des2.WSO2_QAP_AUTO_TEST_CLASS_NAME);
+    print('</a>');
+    print('</td>');
+
+    print('</tr>');
+
+
+}
+}
+
+
+
+%>

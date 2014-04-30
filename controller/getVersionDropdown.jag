@@ -1,0 +1,31 @@
+<%	
+		include("base64_encode.jag");
+		    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+		
+		    var product_id = request.getParameter("WSO2_QAP_PRODUCT_ID");
+		
+		    var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_DataService/get/version_by_id/"+product_id;
+		
+		   	var optionalHeaders = {
+		    "Accept": "application/json",
+		            "Authorization": "Basic "+base64_encode("admin:admin") };
+		
+		
+			var data = get(url,"",optionalHeaders);		
+		
+			var obj = parse(data.data);
+		    //print(obj);
+		
+			var list = obj.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION;
+
+		if(!(list instanceof Array)){
+		        print('<option value='+list.WSO2_QAP_PRODUCT_VERSION_ID+'>'+list.WSO2_QAP_PRODUCT_VERSION+'</option>');	
+		    }
+		else{
+                for (var i=0;i<list.length;i++)
+                {
+                    print('<option value='+list[i].WSO2_QAP_PRODUCT_VERSION_ID+'>'+list[i].WSO2_QAP_PRODUCT_VERSION+'</option>');
+                }
+            }
+				
+%>

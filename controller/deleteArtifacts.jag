@@ -1,0 +1,45 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var list = params.artifactId;
+var param = "";
+
+//var artifact_name = request.getParameter("WSO2_QAP_ARTIFACT_NAME");
+//var artifact_description = request.getParameter("WSO2_QAP_DESCRIPTION");
+//var artifact_location = request.getParameter("WSO2_QAP_LOCATION");
+//var param = '{"_postdelete_artifacts":{"WSO2_QAP_ARTIFACT_NAME" : "'+artifact_name+'","WSO2_QAP_DESCRIPTION" : "'+artifact_description+'",
+//"WSO2_QAP_LOCATION" : "'+artifact_location+'"}}';
+
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+ if(typeof list=== 'string'){
+ 	var url = SERVICE_SECURE_ROOT+"WSO2_QAP_ARTIFACT_DataService/delete/artifacts/"+list;
+
+     del(url, param, optionalHeaders, "json", function (data, xhr) {
+         log("Response received");
+     } );
+
+ 	}
+ 	else{
+ 		print("else");
+		for (var i=0;i<list.length;i++){
+			var url = SERVICE_SECURE_ROOT+"WSO2_QAP_ARTIFACT_DataService/delete/artifacts/"+list[i];
+
+            del(url, param, optionalHeaders, "json", function (data, xhr) {
+                log("Response received");
+            } );
+
+			
+		}
+	}
+
+response.sendRedirect("../view/artifacts_home.jag");
+
+%>
+
+
+

@@ -1,0 +1,70 @@
+<%
+   include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+   
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_DataService/get/details_by_version_id_version_join_build/"+WSO2_QAP_PRODUCT_VERSION_ID;
+
+   var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data2 = get(url,"",optionalHeaders);
+   var obj2 = parse(data2.data);
+   var list2 = obj2.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION;
+
+
+
+   if(list2 == null){
+
+   }
+   else if(!(list2 instanceof Array)){
+
+        print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="buildId" value="'+list2.WSO2_QAP_BUILD_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        var link = "build_dashboard.jag?data="+encodeURIComponent(stringify(list2.WSO2_QAP_BUILD_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list2.WSO2_QAP_BUILD_NAME );
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        print(list2.WSO2_QAP_RELEASE_DATE );
+        print('</td>');
+        print('</tr>');
+
+    }
+    else{
+        
+        for (var i=0;i<list2.length;i++)
+        {
+          if(i%2==1){
+            print('<tr bgcolor="#EEEFFB">');
+          }
+          else{
+            print('<tr>');
+          }
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="buildId" value="'+list2[i].WSO2_QAP_BUILD_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        var link = "build_dashboard.jag?data="+encodeURIComponent(stringify(list2[i].WSO2_QAP_BUILD_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list2[i].WSO2_QAP_BUILD_NAME );
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        print(list2[i].WSO2_QAP_RELEASE_DATE );
+        print('</td>');
+        print('</tr>');
+
+        }
+   }
+
+   // print(list2);
+%>   

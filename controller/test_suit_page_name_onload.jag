@@ -1,0 +1,45 @@
+<%
+	include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+   var req_data = request.getParameter("data");
+   json_data = parse(decodeURIComponent(req_data));
+
+   WSO2_QAP_TEST_SUIT_ID=json_data;
+   
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_DataService/get/testsuit_join_testplan_by_testsuit_id/"+WSO2_QAP_TEST_SUIT_ID;
+
+   var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data = get(url,"",optionalHeaders);
+   var obj = parse(data.data);
+   var list = obj.WSO2_QAP_DATA_TESTSUIT_join_TESTPLANCollection.WSO2_QAP_DATA_TESTSUIT_join_TESTPLAN;
+   
+   if(list == null){
+
+   }
+   else if(!(list instanceof Array)){
+      if(list.WSO2_QAP_TEST_SUIT_NAME===null){
+      print("Sorry this page isn't available");
+      }else{
+
+         print("<h2>");
+         print("Test Suit Name "+list.WSO2_QAP_TEST_SUIT_NAME);
+         print("</h2>");
+      }
+   }
+   else{
+      if(list[0].WSO2_QAP_TEST_SUIT_NAME===null){
+      print("Sorry this page isn't available");
+      }else{
+
+         print("<h2>");
+         print("Test Suit Name "+list[0].WSO2_QAP_TEST_SUIT_NAME);
+         print("</h2>");
+      }
+   }
+   
+
+%>

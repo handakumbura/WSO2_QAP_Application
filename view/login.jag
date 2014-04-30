@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <%
+         include("../const.jag");
+         include("template/sso.jag");
+         var name = session.get("username");
+         if (name === null) {
+         
+         } else {
+             response.sendRedirect("../index.jag");
+         }
+         var ROOT = session.get("root");
+         if(ROOT===null){
+             response.sendRedirect("../index.jag");
+         }
+         
+         var SERVICE_ROOT = session.get("service_root");
+         if(SERVICE_ROOT===null){
+             response.sendRedirect("../index.jag");
+         }
+         
+         %>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <title>WSO2 QA Portal</title>
+      <link href="../resources/css/global.css" rel="stylesheet" type="text/css" media="all">
+      <link href="../resources/css/main.css" rel="stylesheet" type="text/css" media="all">
+      <link href="../resources/css/jqueryui-themeroller.css" rel="stylesheet" type="text/css" media="all">
+      <link href="../resources/css/dialog.css" rel="stylesheet" type="text/css" media="all">
+      <link rel="stylesheet" href="../resources/css/carbonFormStyles.css">
+      <link rel="icon" href="../resources/images/favicon.ico" type="image/x-icon">
+      <link rel="shortcut icon" href="../resources/images/favicon.ico" type="image/x-icon">
+      <script type="text/javascript" src="../resources/js/jquery-1.js"></script>
+      <script type="text/javascript" src="../resources/js/jquery.js"></script>
+      <script type="text/javascript" src="../resources/js/jquery-ui.js"></script>
+      <script type="text/javascript" src="../resources/js/jquery_004.js"></script>
+      <script type="text/javascript" src="../resources/js/jquery_005.js"></script>
+      <script type="text/javascript" src="../resources/js/jquery_002.js"></script>
+      <script type="text/javascript" src="../resources/js/jquery_006.js"></script>
+      <script type="text/javascript" src="../resources/js/jquery_003.js"></script>
+      <script type="text/javascript" src="../resources/js/main.js"></script>
+      <script type="text/javascript" src="../resources/js/WSRequest.js"></script>
+      <script type="text/javascript" src="../resources/js/cookies.js"></script>
+      <script type="text/javascript" src="../resources/js/customControls.js"></script>
+   </head>
+   <body>
+      <noscript>
+         <div class="something-wrong">
+            <div class="title">JavaScript is disabled on your browser</div>
+            <div class="content">Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.</div>
+         </div>
+      </noscript>
+      <div id="dcontainer"></div>
+      <script type="text/javascript" src="../resources/js/dialog.js"></script>
+      <!-- JS imports for collapsible menu -->
+      <script src="../resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+      <script src="../resources/js/animation-min.js" type="text/javascript"></script>
+      <script src="../resources/js/template.js" type="text/javascript"></script>
+      <script src="../resources/js/yahoo-min.js" type="text/javascript"></script>
+      <script src="../resources/js/selector-min.js" type="text/javascript"></script>
+      <table id="main-table" border="0" cellspacing="0">
+         <tbody>
+            <tr>
+               <td id="header" colspan="3">
+                  <!--[IF IE 7]>
+                  <style>
+                     div#header-div div.right-links{
+                     position:absolute;
+                     }
+                  </style>
+                  <![endif]-->
+                  <div id="header-div">
+                     <div class="right-logo">QA Portal</div>
+                     <div class="left-logo">
+                        <a href="../index.jag" class="header-home"><img src="../resources/images/1px.gif" width="300px" height="32px"></a>
+                     </div>
+                     <div class="middle-ad">
+                     </div>
+                     <div class="header-links">
+                        <div class="right-links">
+                           <ul>
+                              <li class="right">
+                                 <%
+                                    if(name==null){
+                                        print(" <a href=\"../index.jag\">Sign-in</a>");
+                                    }
+                                    else{
+                                        print("<a href=\"../controller/logout_action.jag\" >Sign-out</a>");
+                                    }
+                                    
+                                    %>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="middle">
+                                 <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="left">
+                                 <a target="_blank" href="https://localhost:9443/carbon/docs/about.jag">About</a>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </td>
+            </tr>
+            <tr>
+               <td class="vertical-menu-container" id="vertical-menu-container" style="display:none;">
+                  <div id="menu-panel-button0"></div>
+                  <div id="menu-panel-button1" class="menu-panel-buttons"></div>
+                  <div id="menu-panel-button2" class="menu-panel-buttons"></div>
+                  <div id="menu-panel-button3" class="menu-panel-buttons"></div>
+                  <div id="menu-panel-button4" class="menu-panel-buttons"></div>
+                  <div id="menu-panel-button5" class="menu-panel-buttons"></div>
+                  <div id="menu-panel-button_dummy" style="display:none"></div>
+               </td>
+               <td style="display: none;" id="menu-panel" valign="top">
+                  <table id="menu-table" border="0" cellspacing="0">
+                     <tbody>
+                        <tr>
+                           <td id="region1">
+                              <div id="menu">
+                                 <ul class="main">
+                                    <li><a href="https://localhost:9443/carbon/admin/index.jsp" class="menu-home">Home</a></li>
+                                 </ul>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td id="region2">
+                              <div id="menu">
+                                 <ul class="main"> </ul>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td id="region3">
+                              <div id="menu">
+                                 <ul class="main"> </ul>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td id="region4">
+                              <div id="menu">
+                                 <ul class="main"> </ul>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td id="region5">
+                              <div id="menu">
+                                 <ul class="main"> </ul>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><img src="../resources/images/1px.gif" width="225px" height="1px"></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </td>
+               <td id="middle-content">
+                  <table id="content-table" border="0" cellspacing="0">
+                     <tbody>
+                        <tr>
+                           <td id="page-header-links">
+                              <table class="page-header-links-table" cellspacing="0">
+                                 <tbody>
+                                    <tr>
+                                       <td class="breadcrumbs">
+                                          <table class="breadcrumb-table" cellspacing="0">
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div id="breadcrumb-div"></div>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </td>
+                                       <td class="page-header-help"><a href="https://localhost:9443/carbon/admin/docs/userguide.jag" target="_blank">Help</a></td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </td>
+                        </tr>
+                        <tr id="middle-container-tr">
+                           <td id="body">
+                              <img src="../resources/images/1px.gif" width="735px" height="1px">
+                              <%
+                                 var usernameVal = session.get("username");
+                                 %>
+                              <script type="text/javascript">
+                                 function doLoginValidation() {
+                                     var val = <%=usernameVal%>;
+                                 
+                                                                                                    if (val===null) {
+                                                                                                        CARBON.showWarningDialog('Please enter a valid user name and a password.');
+                                                                                                        document.getElementById('txtUserName').focus();
+                                                                                                        return false;
+                                                                                                    }
+                                 
+                                                                                                    return true;
+                                                                                                }
+
+                                 
+                                                                                                function doValidation() {
+                                                                                                    var reason = "";
+                                 
+                                                                                                    var userNameEmpty = isEmpty("username");
+                                                                                                    var passwordEmpty = isEmpty("password");
+                                 
+                                                                                                    if (userNameEmpty || passwordEmpty) {
+                                                                                                        CARBON.showWarningDialog('Please enter a valid user name and a password.');
+                                                                                                        document.getElementById('txtUserName').focus();
+                                                                                                        return false;
+                                                                                                    }
+                                 
+                                                                                                    return true;
+                                                                                                }
+                                 
+                                 
+                                                               
+                              </script>
+                              <script type="text/javascript">
+                                 function getSafeText(text){
+                                    text = text.replace(/</g,'&lt;');
+                                    return text.replace(/>/g,'&gt');
+                                 }
+                                 
+                                    function checkInputs(){
+                                       var loginForm = document.getElementById('loginForm');
+                                       var backendUrl = document.getElementById("txtbackendURL");
+                                       var username = document.getElementById("txtUserName");
+                                 
+                                       backendUrl.value = getSafeText(backendUrl.value);
+                                       username.value = getSafeText(username.value);
+                                       loginForm.submit();
+                                    }
+                              </script>
+                              <div id="middle">
+                                 <table cellspacing="0" width="100%">
+                                    <tbody>
+                                       <tr>
+                                          <td>
+                                             <div id="features">
+                                                <table cellspacing="0">
+                                                   <tbody>
+                                                      <tr class="feature feature-top">
+                                                         <td>
+                                                            <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation"><img src="../resources/images/user-guide.gif"></a>
+                                                         </td>
+                                                         <td>
+                                                            <h3><a onclick="doLoginValidation();return false;" href="products_home.jag">Products</a></h3>
+                                                            <p>Add WSO2 Products to QA portal</p>
+                                                         </td>
+                                                      </tr>
+                                                      <tr class="feature">
+                                                         <td>
+                                                            <a target="_blank" href="http://stackoverflow.com/questions/tagged/wso2/"><img src="../resources/images/forum.gif"></a>
+                                                         </td>
+                                                         <td>
+                                                            <h3><a target="_blank" href="http://stackoverflow.com/questions/tagged/wso2/">Feature</a>
+                                                            </h3>
+                                                            <p> Add, Modify, Delete features from QA plan</p>
+                                                         </td>
+                                                      </tr>
+                                                      <tr class="feature">
+                                                         <td>
+                                                            <a target="_blank" href="https://wso2.org/jira/browse/WSAS"><img src="../resources/images/issue-tracker.gif"></a>
+                                                         </td>
+                                                         <td>
+                                                            <h3><a target="_blank" href="https://wso2.org/jira/browse/WSAS">
+                                                               Issue Tracker</a>
+                                                            </h3>
+                                                            <p>Users are encouraged to report
+                                                               issues &amp; suggest improvements using the JIRA issue tracker. In
+                                                               addition, users can observe the status of the reported issues in
+                                                               progress.
+                                                            </p>
+                                                         </td>
+                                                      </tr>
+                                                      <tr class="feature">
+                                                         <td>
+                                                            <a target="_blank" href="http://wso2.org/mail"><img src="../resources/images/mailing-list.gif"></a>
+                                                         </td>
+                                                         <td>
+                                                            <h3><a target="_blank" href="http://wso2.org/mail">
+                                                               Mailing Lists</a>
+                                                            </h3>
+                                                            <p>Report issues, provide feedback &amp; get help from our mailing lists.</p>
+                                                         </td>
+                                                      </tr>
+                                                   </tbody>
+                                                </table>
+                                             </div>
+                                          </td>
+                                          <td width="20%">
+                                             <div id="loginbox">
+
+                                             <%
+
+                                                var loginParam = request.getParameter("login");
+                                                if(loginParam=='false'){
+                                                    print('<span style="color:red">');
+                                                    print('Invalid Username or Password');
+                                                    print('</span>');
+                                                }
+
+                                             %>
+                                                <h2>Sign-in</h2>
+                                                <form action="../controller/login_action.jag" method="POST" onsubmit="return doValidation();" target="_self">
+                                                   <table>
+                                                      <tbody>
+                                                         <tr>
+                                                            <td>
+                                                               <label for="txtUserName">Username</label>
+                                                            </td>
+                                                            <td>
+                                                               <input id="txtUserName" name="username" class="user" tabindex="1" type="text">
+                                                            </td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td>
+                                                               <label for="txtPassword">Password</label>
+                                                            </td>
+                                                            <td>
+                                                               <input id="txtPassword" name="password" class="password" tabindex="2" type="password">
+                                                            </td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td>
+                                                            </td>
+                                                            <td>
+                                                               <input name="rememberMe" value="rememberMe" tabindex="3" type="checkbox">
+                                                               <label for="txtRememberMe">Remember Me</label>
+                                                            </td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td>&nbsp;</td>
+                                                            <td>
+                                                               <input value="Sign-in" class="button" tabindex="3" type="submit">
+                                                            </td>
+                                                         </tr>
+                                                      </tbody>
+                                                   </table>
+                                                </form>
+                                                <br>
+                                                <a target="_blank" href="https://localhost:9443/carbon/docs/signin_userguide.jag" tabindex="4">
+                                                Sign-in Help
+                                                </a>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+                              <script type="text/javascript">
+                                 function init(loginStatus) {
+                                     // intialize the code and call to the back end
+                                     /*wso2.wsf.Util.initURLs();*/
+                                     /*Initialize the XSLT cache*/
+                                     /*wso2.wsf.XSLTHelper.init();*/
+                                 
+                                     if (loginStatus == 'true') {
+                                     } else if (loginStatus == 'null') {
+                                     } else if (loginStatus == 'false') {
+                                         wso2.wsf.Util.alertWarning("Login failed. Please recheck the user name and password and try again")
+                                     }
+                                 }
+                                 document.getElementById('txtUserName').focus();
+                              </script>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
+            <tr>
+            <% 
+            require("template/footer.jag")
+            %>
+         </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

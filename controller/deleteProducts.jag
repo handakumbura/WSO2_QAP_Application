@@ -1,0 +1,37 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var list = params.productId;
+var param = "WSO2_QAP_PRODUCT_NAME=jty";
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+ if(!(list instanceof Array)){
+ 	var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_DataService/delete/products/"+list;
+     del(url, param, optionalHeaders, "json", function (data, xhr) {
+                log("Response received");
+            } );
+
+ 	}
+ 	else{
+ 		print("else");
+		for (var i=0;i<list.length;i++){
+			var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_DataService/delete/products/"+list[i];
+
+            del(url, param, optionalHeaders, "json", function (data, xhr) {
+                log("Response received");
+            } );
+
+			
+		}
+	}
+
+response.sendRedirect("../view/products_home.jag");
+
+%>
+
+
+

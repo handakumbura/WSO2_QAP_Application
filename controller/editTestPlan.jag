@@ -1,0 +1,29 @@
+<%
+	var data=request.getAllParameters();
+	WSO2_QAP_PRODUCT_VERSION_ID = data.WSO2_QAP_PRODUCT_VERSION_ID;
+ 	WSO2_QAP_PRODUCT_VERSION = data.WSO2_QAP_PRODUCT_VERSION;
+ 	WSO2_QAP_PRODUCT_NAME = data.WSO2_QAP_PRODUCT_NAME;
+ 	testplanID = data.testplanID;
+
+	include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+   
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_DataService/view/test_plan_by_version_id/"+WSO2_QAP_PRODUCT_VERSION_ID;
+
+
+   var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data2 = get(url,"",optionalHeaders);
+   var data3 = data2.data;
+   var obj = parse(data3);
+   var jsondata = obj.WSO2_QAP_TEST_PLANCollection.WSO2_QAP_TEST_PLAN;
+   WSO2_QAP_PLANNING_STATUS = jsondata.WSO2_QAP_PLANNING_STATUS;
+   WSO2_QAP_TEST_PLAN_ID = jsondata.WSO2_QAP_TEST_PLAN_ID;
+
+   var passjsondata='{"WSO2_QAP_PRODUCT_NAME" : "'+WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION" : "'+WSO2_QAP_PRODUCT_VERSION+'","WSO2_QAP_TEST_PLAN_ID" : "'+WSO2_QAP_TEST_PLAN_ID+'","WSO2_QAP_PLANNING_STATUS" : "'+WSO2_QAP_PLANNING_STATUS+'","WSO2_QAP_PRODUCT_VERSION_ID" : "'+WSO2_QAP_PRODUCT_VERSION_ID+'"}';
+
+   response.sendRedirect("../view/add_testplan.jag?data="+encodeURIComponent(stringify(passjsondata)));
+
+%>

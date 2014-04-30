@@ -1,0 +1,104 @@
+<%
+//This file is edited by Chaminda
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var WSO2_QAP_PRODUCT_VERSION_ID=request.getParameter("WSO2_QAP_PRODUCT_VERSION_ID");
+//Used in get method
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin")
+};
+
+var optionalHeadersPost = {
+    "Accept":"application/json",
+    "Content-Type" : "application/json"
+};
+
+var param= request.getAllParameters("UTF-8");
+
+var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/add/testresults";
+var mapping_url = SERVICE_SECURE_ROOT+"WSO2_QAP_BUILD_MAPPING_TESTRESULT_DataService/add/builds_results";
+//Url for update test results
+var results_url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/edit/testresults";
+
+var WSO2_QAP_BUILD_ID="";
+var username= session.get("username");
+var automationresult  = "YET TO RUN";
+
+for(var i in param){
+    if(i.trim() == "WSO2_QAP_BUILD_ID"){
+        WSO2_QAP_BUILD_ID = param[i];
+    }
+}
+
+	for(var i in param){
+
+    	
+	if(i.trim() == "WSO2_QAP_BUILD_ID"){
+    	}
+    	else
+	{
+//print(i);
+//print(param[i]);
+//print(WSO2_QAP_BUILD_ID);
+//print('</br>');
+	//Check whether test results are available
+       		var test_result = param[i];
+		var existing_result_url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/view/testresults_for_build/"+WSO2_QAP_BUILD_ID+"/"+i.trim();
+                var existing_result_data=get(existing_result_url,"",optionalHeaders);
+		var obj_existResults=parse(existing_result_data.data);
+		var exist_results=obj_existResults.WSO2_QAP_TEST_RESULTFORBUILDCollection.WSO2_QAP_TEST_RESULTFORBUILD;
+	//When no results available.
+	if(exist_results == null)
+	{
+	var post_data = '{"_postadd_testresults":{"WSO2_QAP_TEST_CASE_ID" : "'+i.trim()+'","WSO2_QAP_TEST_STATUS" : "'+test_result+'","WSO2_QAP_AUTOMATION_TEST_RESULT" : "'+automationresult	+'","WSO2_QAP_TESTED_BY" : "'+username+'"}}';
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type" , "application/json");
+        xhr.setRequestHeader("Accept" , "application/json");
+        xhr.send(post_data);
+        var result_json =  parse(xhr.responseText);
+        var result_id = result_json.GeneratedKeys.Entry.ID;
+	
+        var post_data_mapping = '{"_postadd_builds_results":{"WSO2_QAP_BUILD_ID" : "'+WSO2_QAP_BUILD_ID+'","WSO2_QAP_TEST_RESULT_ID" : "'+ result_id +'"}}';
+	//Added aditionally
+        xhr.open("POST", mapping_url);
+	xhr.setRequestHeader("Content-Type" , "application/json");
+        xhr.setRequestHeader("Accept" , "application/json");
+	xhr.send(post_data_mapping);
+	//Finished Added	       
+ 	/*post(mapping_url, post_data_mapping, optionalHeadersPost, "json", function (data, xhr) {
+	            log("Response received");
+	        });*/
+        //response.sendRedirect("../view/build_dashboard.jag?data="+WSO2_QAP_BUILD_ID);
+
+	}
+	//When single result is available.
+	else if (!(exist_results instanceof Array)){
+		//Update test results table only..
+	var post_data = '{"_postadd_testresults":{"WSO2_QAP_TEST_CASE_ID" : "'+i.trim()+'","WSO2_QAP_TEST_STATUS" : "'+test_result+'","WSO2_QAP_AUTOMATION_TEST_RESULT" : "'+automationresult		+'","WSO2_QAP_TESTED_BY" : "'+username+'"}}'
+
+	var post_results_update = '{"_postedit_testresults":{"WSO2_QAP_TEST_STATUS" : "'+test_result+'","WSO2_QAP_AUTOMATION_TEST_RESULT" : "'+exist_results.WSO2_QAP_AUTOMATION_TEST_RESULT+'","WSO2_QAP_TESTED_BY":"'+username+'","WSO2_QAP_TEST_RESULT_ID":"'+exist_results.WSO2_QAP_TEST_RESULT_ID+'"}}';
+	var xhr = new XMLHttpRequest();
+        xhr.open("PUT", results_url);
+	xhr.setRequestHeader("Content-Type" , "application/json");
+        xhr.setRequestHeader("Accept" , "application/json");
+	/* xhr.send is using instead of 'post'      
+ 	 post(results_url, post_results_update, optionalHeadersPost, "json", function (data, xhr) {
+	            log("Test Results Updated..");
+	        });  */
+	xhr.send(post_results_update);
+	//response.sendRedirect("../view/build_dashboard.jag?data="+WSO2_QAP_BUILD_ID);
+	}
+	//When multiple results are available
+	else
+	{
+	//(This is not applicable under one build.)
+	//response.sendRedirect("../view/build_dashboard.jag?data="+WSO2_QAP_BUILD_ID);
+	} 
+     
+    }
+   
+}
+response.sendRedirect("../view/build_dashboard.jag?data="+WSO2_QAP_BUILD_ID);  
+%>

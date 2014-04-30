@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <%
+require("../const.jag");
+var name = session.get("username");
+if(name===null){
+    response.sendRedirect("login.jag");
+}
+require("template/head.jag");
+%>
+</head>
+<body>
+<noscript>
+<div class="something-wrong">
+   <div class="title">JavaScript is disabled on your browser</div>
+   <div class="content">Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.</div>
+</div>
+</noscript>
+<div id="dcontainer"></div>
+<script type="text/javascript" src="../resources/js/dialog.js"></script>
+<!-- JS imports for collapsible menu -->
+<script src="../resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+<script src="../resources/js/animation-min.js" type="text/javascript"></script>
+<script src="../resources/js/template.js" type="text/javascript"></script>
+<script src="../resources/js/yahoo-min.js" type="text/javascript"></script>
+<script src="../resources/js/selector-min.js" type="text/javascript"></script>
+<table id="main-table" border="0" cellspacing="0">
+<tbody>
+ <tr>
+      <td id="header" colspan="3">
+         <%
+include("template/header_div.jag");
+%>
+</td>
+</tr>
+<tr id="middle-container-tr">
+<%
+include("template/product_vertical_menu.jag");
+%>
+<%
+include("template/product_menu_panel.jag");
+%>
+
+<td id="middle-content">
+<table id="content-table" border="0" cellspacing="0">
+<tbody>
+<tr>
+         <td id="page-header-links">
+            <table class="page-header-links-table" cellspacing="0">
+               <tbody>
+                  <tr>
+                     <td class="breadcrumbs">
+                        <table class="breadcrumb-table" cellspacing="0">
+                           <tbody>
+                              <tr>
+                                 <td>
+                                    <div id="breadcrumb-div">
+
+                                    </div>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </td>
+                     <td class="page-header-help"><a href="https://localhost:9443/carbon/webapp-list/docs/userguide.jag" target="_blank">Help</a></td>
+                  </tr>
+               </tbody>
+            </table>
+         </td>
+</tr>
+
+<tr>
+    <td id="body">
+            <img src="../resources/images/1px.gif" width="735px" height="1px">
+            <script src="../resources/js/page-logic.js" type="text/javascript"></script>
+
+            <script type="text/javascript">
+            setCookie('current-breadcrumb', 'manage_menu,webapps_menu,webapps_list_menu#');
+              
+            </script>
+
+            <div id="middle"> <h2>Test scenarios to be added</h2></div>
+
+            <table>
+   <tbody>
+      <tr>
+         <td><a href="#" onclick="selectAllInThisPage(true);return false;" style="cursor:pointer">Select all in this page</a>&nbsp;<b>|</b>&nbsp;</td>
+         <td><a href="#" onclick="selectAllInThisPage(false);return false;" style="cursor:pointer">Select none</a></td>
+         <td width="20%">&nbsp;</td>
+         <td><a href="#" id="delete1" onclick="deleteTestcase();return false;">Delete</a></td>
+         <td width="10%">&nbsp;</td>
+         <td><a href="#" id="edit" onclick="editWebapps();return false;">Edit</a></td>
+      </tr>
+   </tbody>
+            </table>
+
+
+    </td>
+
+</tr>
+
+
+</tbody>
+</table>
+</td>
+
+</tr>
+<tr>
+<%
+include("template/footer.jag")
+%>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

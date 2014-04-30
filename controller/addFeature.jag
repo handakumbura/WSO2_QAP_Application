@@ -1,0 +1,32 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var WSO2_QAP_DESCRIPTION = request.getParameter("WSO2_QAP_DESCRIPTION");
+var WSO2_QAP_REDMINE_URL = request.getParameter("WSO2_QAP_REDMINE_URL");
+var WSO2_QAP_SUBJECT = request.getParameter("WSO2_QAP_SUBJECT");
+
+//add feature
+ var param = '{"_postadd_feature":{"WSO2_QAP_DESCRIPTION" : "'+WSO2_QAP_DESCRIPTION+'","WSO2_QAP_REDMINE_URL" : "'+WSO2_QAP_REDMINE_URL+'","WSO2_QAP_SUBJECT" : "'+WSO2_QAP_SUBJECT+'"}}';
+var optionalHeaders = {
+        "Accept":"application/json",
+            "Content-Type" : "application/json",
+                "Authorization": "Basic "+base64_encode("admin:admin") };
+             // "Authorization": "Basic "+base64_encode("admin:admin")
+
+ var url = SERVICE_SECURE_ROOT+"WSO2_QAP_FEATURE_DataService/add/feature";
+
+if(WSO2_QAP_SUBJECT===null ||WSO2_QAP_REDMINE_URL ===null){
+
+	response.sendRedirect("../view/add_feature.jag");
+}
+else{
+	post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+
+	 response.sendRedirect("../view/products_home.jag");
+}
+// print(param);
+
+%>

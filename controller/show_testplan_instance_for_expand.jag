@@ -1,0 +1,57 @@
+<%
+//This file edited by Chaminda
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var url_toget_testsuit_id=SERVICE_SECURE_ROOT+"WSO2_QAP_TESTPLAN_MAPPING_TESTSUIT_DataService/get/testsuit_ids/"+TestPlanID;
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin")
+};
+var data_testSuitID = get(url_toget_testsuit_id,"",optionalHeaders);
+var objTestSuitID=parse(data_testSuitID.data);
+var list_testSuitID=objTestSuitID.WSO2_QAP_TESTPLAN_MAPPING_TESTSUITCollection.WSO2_QAP_TESTPLAN_MAPPING_TESTSUIT;
+if (!(list_testSuitID instanceof Array))
+{
+    var url_testSuits=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_DataService/view/testsuit_by_id/"+list_testSuitID.WSO2_QAP_TEST_SUIT_ID;
+    var data_testSuits=get(url_testSuits,"",optionalHeaders);
+    var objTestSuits=parse(data_testSuits.data);
+    var list_testSuits=objTestSuits.WSO2_QAP_TEST_SUITCollection.WSO2_QAP_TEST_SUIT;
+
+//4 lines added by Chaminda
+var url_testScenariosID=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPING_DataService/get/testscenarios_by_testsuit_ids/"+list_testSuitID.WSO2_QAP_TEST_SUIT_ID;
+var data_testScenarioID=get(url_testScenariosID,"",optionalHeaders);
+var objTestScenarioID=parse(data_testScenarioID.data);
+var list_testscenarioID=objTestScenarioID.WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPINGCollection.WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPING;
+
+    //have to show the test suit details
+    print('<div class="page_collapsible collapse-close" id="body-section1">'+list_testSuits.WSO2_QAP_TEST_SUIT_NAME+'<span></span></div>');
+    print('<div class="container" style="display: none;">');
+    print(' <div class="content">');
+    include("../controller/show_Testscenario_details_for_expand.jag");
+    print('</div>');
+    print('</div>');
+}
+else{
+    for(var i=0;i<list_testSuitID.length;i++)
+    {
+        var url_testSuits=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_DataService/view/testsuit_by_id/"+list_testSuitID[i].WSO2_QAP_TEST_SUIT_ID;
+        var data_testSuits=get(url_testSuits,"",optionalHeaders);
+        var objTestSuits=parse(data_testSuits.data);
+        var list_testSuits=objTestSuits.WSO2_QAP_TEST_SUITCollection.WSO2_QAP_TEST_SUIT;
+//4 lines added by Chaminda
+var url_testScenariosID=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPING_DataService/get/testscenarios_by_testsuit_ids/"+list_testSuitID[i].WSO2_QAP_TEST_SUIT_ID;
+var data_testScenarioID=get(url_testScenariosID,"",optionalHeaders);
+var objTestScenarioID=parse(data_testScenarioID.data);
+var list_testscenarioID=objTestScenarioID.WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPINGCollection.WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPING;
+
+        //have to show the test suit details
+        print('<div class="page_collapsible collapse-close scenario" id="body-section1">'+list_testSuits.WSO2_QAP_TEST_SUIT_NAME+'<span></span></div>');
+        print('<div class="container" style="display: none;">');
+        print(' <div class="content">');
+        include("../controller/show_Testscenario_details_for_expand.jag");
+        print('</div>');
+        print('</div>');
+    }
+}
+
+%>

@@ -1,0 +1,46 @@
+<%
+	include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var TestCaseName=request.getParameter("WSO2_QAP_TEST_CASE_NAME");
+var status=request.getParameter("WSO2_QAP_TEST_CASE_STATUS");
+var description=request.getParameter("WSO2_QAP_TEST_CASE_DESCRIPTION");
+var artifact=request.getParameter("WSO2_QAP_TEST_CASE_ARTIFACT");
+var autotestcase=request.getParameter("WSO2_QAP_TEST_CASE_AUTOMATIONTESTCASE");
+
+
+var param='{"_postadd_addtestcase":{"WSO2_QAP_TEST_CASE_NAME" : "'+TestCaseName+'","WSO2_QAP_AUTOMATION_STATUS" : "'+status+'","WSO2_QAP_DESCRIPTION" : "'+description+'","WSO2_QAP_ARTIFACT_ID" : "'+artifact+'","WSO2_QAP_AUTO_TEST_CLASS_ID" : "'+autotestcase+'"}}';
+var optionalHeaders = {
+        "Accept":"application/json",
+            "Content-Type" :"application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/add/testcase";
+
+if(TestCaseName===""||status==="")
+{
+    print("blank1");
+    response.sendRedirect("../view/add_testcase.jag");
+}
+else if (description==="")
+{
+    print("blank2");
+    response.sendRedirect("../view/add_testcase.jag");
+}
+else{
+     post(url, param, optionalHeaders, "json",  function (data, xhr) {
+         log("Response received");
+
+     } );
+    response.sendRedirect("../view/testcase_home.jag");
+    print("added");
+}
+
+
+
+%>
+
+
+

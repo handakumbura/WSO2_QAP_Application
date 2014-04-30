@@ -1,0 +1,29 @@
+<%
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var WSO2_QAP_TEST_SCENARIO_ID = parse(request.getParameter("data"));
+    //print(WSO2_QAP_TEST_SCENARIO_ID);
+    
+    var urlTestScenarioDetails  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_DataService/view/testscenario_with_id/"+WSO2_QAP_TEST_SCENARIO_ID;
+    //print(urlTestScenarioDetails);
+
+   	var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+	var dataScenarioDetails = get(urlTestScenarioDetails,"",optionalHeaders);
+	var objScenarioDetails = parse(dataScenarioDetails.data);
+	//print(objScenarioDetails);
+	var listScenarioDetails = objScenarioDetails.WSO2_QAP_TEST_SCENARIOCollection.WSO2_QAP_TEST_SCENARIO;
+	//print(listScenarioDetails);
+
+print('<input type="hidden" name="WSO2_QAP_TEST_SCENARIO_ID" value="'+WSO2_QAP_TEST_SCENARIO_ID+'">');
+print("<tr class=\"tableEvenRow\"><td>Name</td>");
+print("<td><a href="+listScenarioDetails.WSO2_QAP_TEST_SCENARIO_NAME+" target=\"_blank\">"+listScenarioDetails.WSO2_QAP_TEST_SCENARIO_NAME+"</a></td></tr>");
+print("<tr class=\"tableOddRow\"><td>Description</td>");
+print("<td>"+listScenarioDetails.WSO2_QAP_DESCRIPTION+"</td></tr>");
+
+
+
+ %>

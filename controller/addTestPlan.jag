@@ -1,0 +1,51 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var data = request.getParameter("data");
+var WSO2_QAP_PLANNING_STATUS = request.getParameter("WSO2_QAP_PLANNING_STATUS");
+var jdata = parse(data);
+var optionalHeaders = {
+        "Accept":"application/json",
+        "Content-type":"application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+// print(jdata)
+
+if(jdata.WSO2_QAP_TEST_PLAN_ID==null){
+
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_DataService/add/test_plan";
+var param = '{"_postadd_test_plan":{"WSO2_QAP_PRODUCT_VERSION_ID" : "'+jdata.WSO2_QAP_PRODUCT_VERSION_ID+'","WSO2_QAP_PLANNING_STATUS" : "'+WSO2_QAP_PLANNING_STATUS+'"}}';
+// var param = "WSO2_QAP_PRODUCT_NAME="+product_name;
+print(param);
+
+// if(product_name===null){
+
+// 	response.sendRedirect("../view/add_product.jag");
+// }
+// else{
+	post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+	response.sendRedirect("../view/product_version_dashboard.jag?data="+jdata.WSO2_QAP_PRODUCT_VERSION_ID);
+// }
+}
+else{
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_DataService/update/test_plan";
+var param = '{"_updateupdate_test_plan":{"WSO2_QAP_PRODUCT_VERSION_ID" : "'+jdata.WSO2_QAP_PRODUCT_VERSION_ID+'","WSO2_QAP_PLANNING_STATUS" : "'+WSO2_QAP_PLANNING_STATUS+'","WSO2_QAP_TEST_PLAN_ID" : "'+jdata.WSO2_QAP_TEST_PLAN_ID+'"}}';
+// var param = "WSO2_QAP_PRODUCT_NAME="+product_name;
+
+
+// if(product_name===null){
+
+// 	response.sendRedirect("../view/add_product.jag");
+// }
+// else{
+	put(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+	response.sendRedirect("../view/product_version_dashboard.jag?data="+jdata.WSO2_QAP_PRODUCT_VERSION_ID);
+
+}
+%>

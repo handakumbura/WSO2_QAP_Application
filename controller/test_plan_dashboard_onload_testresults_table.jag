@@ -1,0 +1,78 @@
+<%
+   include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+   // print('<input type="hidden" name="WSO2_QAP_PRODUCT_VERSION_ID" value="'+WSO2_QAP_PRODUCT_VERSION_ID+'">');
+
+   
+   print('<input type="hidden" name="WSO2_QAP_TEST_PLAN_ID" value="'+jd2.WSO2_QAP_TEST_PLAN_ID+'">');
+
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_DataService/view/map_build_with_results/"+jd2.WSO2_QAP_TEST_PLAN_ID;
+
+   var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data = get(url,"",optionalHeaders);
+   var obj = parse(data.data);
+
+   var list = obj.WSO2_QAP_BUILD_RESULTCollection.WSO2_QAP_BUILD_RESULT;
+
+   if(list==null){
+    print('<tr>');
+        print(' <td>');
+        
+        print('</td>');
+        print(' <td>');
+        
+        print('</td>');
+        
+        print('</tr>');
+
+   }
+
+   else{
+
+   if(!(list instanceof Array)){
+  
+        print('<tr>');
+        print(' <td><p>&nbsp;</p>');
+        var link = "build_dashboard.jag?data="+encodeURIComponent(stringify(list.WSO2_QAP_BUILD_ID));
+        print('<a href="'+link+'">');
+        print(list.WSO2_QAP_BUILD_NAME);
+        print("</a>");
+        print('</td>');
+        print(' <td>');
+        print(list.WSO2_QAP_RELEASE_DATE);
+        print('</td>');
+        
+        print('</tr>');
+
+    }
+    else{
+        for (var i=0;i<list.length;i++)
+        {
+
+          if(i%2==1){
+            print('<tr bgcolor="#EEEFFB">');
+          }
+          else{
+            print('<tr>');
+          }
+        print(' <td>&nbsp;&nbsp;');
+        var link = "build_dashboard.jag?data="+encodeURIComponent(stringify(list[i].WSO2_QAP_BUILD_ID));
+        print('<a href="'+link+'">');
+        print(list[i].WSO2_QAP_BUILD_NAME);
+        print("</a>");
+        print('</td>');
+        print(' <td>');
+        print(list[i].WSO2_QAP_RELEASE_DATE);
+        print('</td>');
+        
+        print('</tr>');
+
+        }
+   }
+   }
+
+   // print(list2);
+%>   

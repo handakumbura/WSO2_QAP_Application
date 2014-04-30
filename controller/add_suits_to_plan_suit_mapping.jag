@@ -1,0 +1,42 @@
+<%
+
+include("base64_encode.jag");
+
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var req_data = request.getAllParameters();
+var passjsondata='{"verid_proname_planid":{"WSO2_QAP_TEST_PLAN_ID" : "'+req_data.WSO2_QAP_TEST_PLAN_ID+'","WSO2_QAP_PRODUCT_NAME" : "'+req_data.WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION" : "'+req_data.WSO2_QAP_PRODUCT_VERSION+'"}}';
+
+// print(req_data);
+
+var optionalHeadersP = {
+        "Accept":"application/json",
+            "Content-Type" : "application/json",
+                "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_TEST_SUIT_MAPPING_DataService/add/data_to_plan_suit_mapping";
+
+
+if(req_data.testSuitId==null){
+	response.sendRedirect("../view/test_plan_dashboard.jag?data="+encodeURIComponent(stringify(passjsondata)));
+}
+else{
+	if(!(req_data.testSuitId instanceof Array)){
+		var param = '{"_postadd_data_to_plan_suit_mapping":{"WSO2_QAP_TEST_PLAN_ID" : "'+req_data.WSO2_QAP_TEST_PLAN_ID+'","WSO2_QAP_TEST_SUIT_ID" : "'+req_data.testSuitId+'"}}';
+		post(url, param, optionalHeadersP, "json", function (data, xhr) {
+       		log("Response received");
+   		} );
+	}
+	else{
+	for (var i = 0; i < req_data.testSuitId.length; i++) {
+		var param = '{"_postadd_data_to_plan_suit_mapping":{"WSO2_QAP_TEST_PLAN_ID" : "'+req_data.WSO2_QAP_TEST_PLAN_ID+'","WSO2_QAP_TEST_SUIT_ID" : "'+req_data.testSuitId[i]+'"}}';
+		post(url, param, optionalHeadersP, "json", function (data, xhr) {
+       		log("Response received");
+   		} );
+	};
+}
+	
+
+ response.sendRedirect("../view/test_plan_dashboard.jag?data="+encodeURIComponent(stringify(passjsondata)));
+}
+
+%>

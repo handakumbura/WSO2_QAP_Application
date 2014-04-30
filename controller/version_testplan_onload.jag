@@ -1,0 +1,76 @@
+<%
+   include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+   
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_DataService/view/test_plan_by_version_id/"+WSO2_QAP_PRODUCT_VERSION_ID;
+
+   var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data4 = get(url,"",optionalHeaders);
+   var obj4 = parse(data4.data);
+   var list4 = obj4.WSO2_QAP_TEST_PLANCollection.WSO2_QAP_TEST_PLAN;
+   
+   // print('<tr bgcolor="#EEEFFB">');
+   // print('<td>');
+   // print('</td>');
+   // print('<td>');
+   // print('<strong> Test Plan Name <strong/>');
+   // print('</td>');
+   // print('<td>');
+   // print('<strong> Status <strong/>');
+   // print('</td>');
+
+   var passjsondata='{"verid_proname_planid":{"WSO2_QAP_TEST_PLAN_ID" : "'+list4.WSO2_QAP_TEST_PLAN_ID+'","WSO2_QAP_PRODUCT_NAME" : "'+list1.WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION" : "'+list1.WSO2_QAP_PRODUCT_VERSION+'"}}';
+
+
+   // if(list4.length==null && list4.WSO2_QAP_PLANNING_STATUS!=null){
+    if(!(list4 instanceof Array)){
+
+        print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="testplanID" value="'+list4.WSO2_QAP_TEST_PLAN_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        var link = "test_plan_dashboard.jag?data="+encodeURIComponent(stringify(passjsondata));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list1.WSO2_QAP_PRODUCT_NAME+" "+list1.WSO2_QAP_PRODUCT_VERSION);
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        print(list4.WSO2_QAP_PLANNING_STATUS);
+        print('</td>');
+        print('</tr>');
+
+    }
+    else{
+        for (var i=0;i<list4.length;i++)
+        {
+          if(i%2==1){
+            print('<tr bgcolor="#EEEFFB">');
+          }
+          else{
+            print('<tr>');
+          }
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="testplanID" value="'+list4[i].WSO2_QAP_TEST_PLAN_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print(' </td>');
+        print(' <td>');
+        
+        print("&emsp;&emsp;&emsp;");
+        var link = "test_plan_dashboard.jag?data="+encodeURIComponent(stringify(passjsondata));
+        print('<a href="'+link+'">');
+        print(list1.WSO2_QAP_PRODUCT_NAME+" "+list1.WSO2_QAP_PRODUCT_VERSION);
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        print(list4[i].WSO2_QAP_PLANNING_STATUS);
+        print('</td>');
+        print('</tr>');
+        }
+   }
+
+%> 

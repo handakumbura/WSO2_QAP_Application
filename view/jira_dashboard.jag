@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<%
+var name = session.get("username");
+if(name===null){
+           response.sendRedirect("template/login.jag");
+         }
+         require("template/head.jag");
+         %>
+</head>
+<body>
+<style type="text/css" title="currentStyle">
+      @import "../resources/datatables/css/page.css";
+      @import "../resources/datatables/css/table.css";
+    </style>
+
+    <!--<script type="text/javascript" language="javascript" src="../resources/datatables/js/table_jquery.js"></script> -->
+    <script type="text/javascript" language="javascript" src="../resources/datatables/js/jquery.dataTables.js"></script>
+    
+  <noscript>
+    <div class="something-wrong">
+      <div class="title">JavaScript is disabled on your browser</div>
+      <div class="content">Please enable JavaScript or upgrade to a
+        JavaScript-capable browser to use WSO2 Products.</div>
+    </div>
+  </noscript>
+  <div id="dcontainer"></div>
+  <script type="text/javascript" src="resources/js/dialog.js"></script>
+  <!-- JS imports for collapsible menu -->
+  <script src="resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+  <script src="resources/js/animation-min.js" type="text/javascript"></script>
+  <script src="resources/js/template.js" type="text/javascript"></script>
+  <script src="resources/js/yahoo-min.js" type="text/javascript"></script>
+  <script src="resources/js/selector-min.js" type="text/javascript"></script>
+  <table id="main-table" border="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td id="header" colspan="3"><%
+        require("template/header_div.jag");
+        %>
+        </td>
+      </tr>
+      <tr>
+        <% 
+        require("template/product_vertical_menu.jag");
+        %>
+
+        <%
+        require("template/product_menu_panel.jag");
+        %>
+
+        <td id="middle-content">
+          <table id="content-table" border="0" cellspacing="0">
+            <tbody>
+              <tr>
+                <td id="page-header-links">
+                  <table class="page-header-links-table" cellspacing="0">
+                    <tbody>
+                      <tr>
+                        <td class="breadcrumbs">
+                          <table class="breadcrumb-table" cellspacing="0">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <div id="breadcrumb-div">
+                                    
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                        <td class="page-header-help"><a
+                          href="https://localhost:9443/carbon/webapp-list/docs/userguide.jag"
+                          target="_blank">Help</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td id="body"><img src="resources/images/1px.gif" width="735px"
+                  height="1px"> 
+<!--script src="../resources/js/logic_test_result_dashboard.js" type="text/javascript"></script-->
+                 <script type="text/javascript">
+                              var msgId;
+
+                              msgId = 'MSG13891780124300.19163215448530113';
+
+                              </script> <script type="text/javascript">
+                              setCookie('current-breadcrumb', 'manage_menu,webapps_menu,webapps_list_menu#');
+                              
+                            </script> 
+                                 
+
+                      <div id="middle">
+                      <h2>Jira dashboard</h2>
+                        <div id="workArea">                                 
+                          <p>&nbsp;</p>
+                            <form action="delete_webapps.jsp" name="webappsForm1"
+                            method="post">
+                              <table class="styledLeft" id="webappsTable" width="100%">
+                              <tbody>
+                              <%
+                              require("../controller/jiraDashboardOnLoad.jag");
+                              %>
+                              </tbody>
+                              </table>
+
+                            </form>
+                                             
+                          </div>
+                          </div>
+                          </td>
+                          </tr>
+                          </tbody>
+                        </table>
+                
+                </td>
+
+                  </tr>
+                  <tr>
+               <tr>
+              <% 
+              require("template/footer.jag")
+              %>
+              </tr>
+
+
+              </tr>
+            </tbody>
+            </table>
+</body>
+</html>

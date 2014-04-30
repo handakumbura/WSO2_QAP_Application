@@ -1,0 +1,76 @@
+<%
+//This file Edited By Chaminda
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin")
+};
+
+//Commented By Chaminda
+//var url_testcaseID=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING_DataService/view/testcase_with_testscenarioid/"+list_testscenarioID[j].WSO2_QAP_TEST_SCENARIO_ID;
+//var data_testcaseID=get(url_testcaseID,"",optionalHeaders);
+//var objTestcaseID=parse(data_testcaseID.data);
+//var list_testcaseID=objTestcaseID.WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPINGCollection.WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING;
+
+if(list_testcaseID == null){
+}
+else if(!(list_testcaseID instanceof Array))
+{
+    var url_testcasedetails=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/view/testcase_by_id/"+list_testcaseID.WSO2_QAP_TEST_CASE_ID;
+    var data_testcasedetails=get(url_testcasedetails,"",optionalHeaders);
+    var objTestcasedetails=parse(data_testcasedetails.data);
+    var list_testcasedetails=objTestcasedetails.WSO2_QAP_TEST_CASECollection.WSO2_QAP_TEST_CASE;
+    if(list_testcasedetails==null){
+    }
+    else{
+        print(' <tr>');
+        print(' <td>');
+        var link = "view_testcase.jag?data="+encodeURIComponent(stringify(list_testcasedetails.WSO2_QAP_TEST_CASE_ID));
+        print('<a href="'+link+'">');
+        print(list_testcasedetails.WSO2_QAP_TEST_CASE_NAME);
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        print(list_testcasedetails.WSO2_QAP_DESCRIPTION);
+        print('</td>');
+        print(' <td>');
+        print(list_testcasedetails.WSO2_QAP_AUTOMATION_STATUS);
+        print('</td>');
+        print(' <td>');
+        print('<input type="radio" name="' +list_testcasedetails.WSO2_QAP_TEST_CASE_ID+' "'+' value="PASSED">PASSED</input>');
+        print('<input type="radio" name="' +list_testcasedetails.WSO2_QAP_TEST_CASE_ID+' "'+' value="FAILED">FAILED</input>');
+        print('<input type="radio" name="' +list_testcasedetails.WSO2_QAP_TEST_CASE_ID+' "'+' value="IN PROGRESS">IN PROGRESS</input>');
+        print('</td>');
+        print('</tr>');
+    }
+}
+else{
+    for(var k=0;k<list_testcaseID.length;k++)
+    {
+        var url_testcasedetails=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/view/testcase_by_id/"+list_testcaseID[k].WSO2_QAP_TEST_CASE_ID;
+        var data_testcasedetails=get(url_testcasedetails,"",optionalHeaders);
+        var objTestcasedetails=parse(data_testcasedetails.data);
+        var list_testcasedetails=objTestcasedetails.WSO2_QAP_TEST_CASECollection.WSO2_QAP_TEST_CASE;
+            print(' <tr>');
+            print(' <td>');
+            var link = "view_testcase.jag?data="+encodeURIComponent(stringify(list_testcasedetails.WSO2_QAP_TEST_CASE_ID));
+            print('<a href="'+link+'">');
+            print(list_testcasedetails.WSO2_QAP_TEST_CASE_NAME);
+            print('</a>');
+            print('</td>');
+            print(' <td>');
+            print(list_testcasedetails.WSO2_QAP_DESCRIPTION);
+            print('</td>');
+            print(' <td>');
+            print(list_testcasedetails.WSO2_QAP_AUTOMATION_STATUS);
+            print('</td>');
+            print(' <td>');
+            print('<input type="radio" name="' + list_testcasedetails.WSO2_QAP_TEST_CASE_ID +' "'+' value="PASSED">PASSED</input>');
+            print('<input type="radio" name="' + list_testcasedetails.WSO2_QAP_TEST_CASE_ID +' "'+'  value="FAILED">FAILED</input>');
+            print('<input type="radio" name="' + list_testcasedetails.WSO2_QAP_TEST_CASE_ID +' "'+'  value="IN PROGRESS">IN PROGRESS</input>');
+            print('</td>');
+            print('</tr>');
+        }
+    }
+%>

@@ -1,0 +1,85 @@
+<%
+//This file edited By Chaminda
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin")
+};
+
+//4 lines commented By Chaminda.
+//var url_testScenariosID=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPING_DataService/get/testscenarios_by_testsuit_ids/"+list_testSuitID[i].WSO2_QAP_TEST_SUIT_ID;
+//var data_testScenarioID=get(url_testScenariosID,"",optionalHeaders);
+//var objTestScenarioID=parse(data_testScenarioID.data);
+//var list_testscenarioID=objTestScenarioID.WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPINGCollection.WSO2_QAP_TEST_SUIT_TEST_SCENARIO_MAPPING;
+
+if(list_testscenarioID == null){
+}
+else if (!(list_testscenarioID instanceof Array))
+{
+    var url_testScenarios=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_DataService/view/testscenario_with_id/"+list_testscenarioID.WSO2_QAP_TEST_SCENARIO_ID;
+    var data_testscenarios=get(url_testScenarios,"",optionalHeaders);
+    var objTestScenarios=parse(data_testscenarios.data);
+    var list_Testscenarios=objTestScenarios.WSO2_QAP_TEST_SCENARIOCollection.WSO2_QAP_TEST_SCENARIO;
+
+    //have to show the test scenario details    
+   var url_testcaseID=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING_DataService/view/testcase_with_testscenarioid/"+list_testscenarioID.WSO2_QAP_TEST_SCENARIO_ID;
+   var data_testcaseID=get(url_testcaseID,"",optionalHeaders);
+   var objTestcaseID=parse(data_testcaseID.data);
+   var list_testcaseID=objTestcaseID.WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPINGCollection.WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING;
+
+    print('<div class="page_collapsible collapse-close" id="body-section1">');
+    print(list_Testscenarios.WSO2_QAP_TEST_SCENARIO_NAME);
+    //print("&emsp;&emsp;&emsp;");
+    //print(list_Testscenarios.WSO2_QAP_DESCRIPTION);
+    print('<span></span></div>');
+    print('<div class="container" style="display: none;">');
+    print(' <div class="content">');
+	//Added By Chaminda - table part
+	print('<table id="baram1" width="100\%">');
+        print('<tr>');
+        print('<th width="30\%">Test Case Name</th>');
+        print('<th width="15\%">Test Status</th>');
+        print('<th width="20\%">Automation Test Status</th>');
+        print('<th width="20\%">Tested by</th>');
+        print('<th width="15\%">Jira link</th>');
+	print('</tr>');
+        include("../controller/showTestresults_for_expand.jag");
+        print('</table>');
+    	print('</div>');
+    	print('</div>');
+}
+else{
+   for(var j=0;j<list_testscenarioID.length;j++)
+    {
+        var url_testScenarios=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_DataService/view/testscenario_with_id/"+list_testscenarioID[j].WSO2_QAP_TEST_SCENARIO_ID;
+        var data_testscenarios=get(url_testScenarios,"",optionalHeaders);
+        var objTestScenarios=parse(data_testscenarios.data);
+        var list_Testscenarios=objTestScenarios.WSO2_QAP_TEST_SCENARIOCollection.WSO2_QAP_TEST_SCENARIO;
+//Added by Chaminda
+var url_testcaseID=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING_DataService/view/testcase_with_testscenarioid/"+list_testscenarioID[j].WSO2_QAP_TEST_SCENARIO_ID;
+var data_testcaseID=get(url_testcaseID,"",optionalHeaders);
+var objTestcaseID=parse(data_testcaseID.data);
+var list_testcaseID=objTestcaseID.WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPINGCollection.WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING;
+        
+        //have to show the test scenario details
+        print('<div class="page_collapsible collapse-close" id="body-section1">');
+        print(list_Testscenarios.WSO2_QAP_TEST_SCENARIO_NAME);
+        print('<span></span></div>');
+        print('<div class="container" style="display: none;">');
+        print(' <div class="content">');
+        print('<table id="baram" width="100\%">');
+        print('<tr>');
+        print('<th width="30\%">Test Case Name</th>');
+        print('<th width="15\%">Test Status</th>');
+        print('<th width="20\%">Automation Test Status</th>');
+        print('<th width="20\%">Tested by</th>');
+        print('<th width="15\%">Jira link</th>');
+        print('</tr>');
+        include("../controller/showTestresults_for_expand.jag");
+        print('</table>');
+        print('</div>');
+        print('</div>');
+    }
+  }
+%>

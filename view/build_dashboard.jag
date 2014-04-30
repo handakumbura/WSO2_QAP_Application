@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <%
+
+         include("template/head.jag");
+         %>
+      <!-- JS -->
+      <!--script type="text/javascript" src="./jQuery Collapsible Demo_files/jquery.min.js"></script-->
+      <script type="text/javascript" src="../resources/collapsible_menu/js/highlight.pack.js"></script>
+      <!--script type="text/javascript" src="./jQuery Collapsible Demo_files/jquery.cookie.js"></script-->
+      <script type="text/javascript" src="../resources/collapsible_menu/js/jquery.collapsible.js"></script>
+      <script type="text/javascript">
+         $(document).ready(function() {
+         
+         
+         
+             //syntax highlighter
+             hljs.tabReplace = '    ';
+             hljs.initHighlightingOnLoad();
+         
+             $.fn.slideFadeToggle = function(speed, easing, callback) {
+                 return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
+             };
+         
+             //collapsible management
+             $('.collapsible').collapsible({
+                 speed: 'slow',
+                 animateOpen: function (elem, opts) { //replace the standard slideUp with custom function
+                     elem.next().slideFadeToggle(opts.speed);
+                 },
+                 animateClose: function (elem, opts) { //replace the standard slideDown with custom function
+                     elem.next().slideFadeToggle(opts.speed);
+                 },
+                 loadOpen: function (elem) { //replace the standard open state with custom function
+                     elem.next().show();
+                 },
+                 loadClose: function (elem, opts) { //replace the close state with custom function
+                     elem.next().hide();
+                 }
+             });
+             $('.page_collapsible').collapsible({
+                 speed: 'slow',
+                 animateOpen: function (elem, opts) { //replace the standard slideUp with custom function
+                     elem.next().slideFadeToggle(opts.speed);
+                 },
+                 animateClose: function (elem, opts) { //replace the standard slideDown with custom function
+                     elem.next().slideFadeToggle(opts.speed);
+                 },
+                 loadOpen: function (elem) { //replace the standard open state with custom function
+                     elem.next().show();
+                 },
+                 loadClose: function (elem, opts) { //replace the close state with custom function
+                     elem.next().hide();
+                 }
+         
+             });
+         
+             //assign open/close all to functions
+             function openAll() {
+                 $('.page_collapsible').collapsible('openAll');
+             }
+             function closeAll() {
+                 $('.page_collapsible').collapsible('closeAll');
+             }
+         
+             //listen for close/open all
+             $('#closeAll').click(function(event) {
+                 event.preventDefault();
+                 closeAll();
+         
+             });
+             $('#openAll').click(function(event) {
+                 event.preventDefault();
+                 openAll();
+             });
+         
+                 event.preventDefault();
+                 openAll();
+         
+         });
+      </script>
+      <!-- /JS -->
+      <!-- CSS -->
+      <link rel="stylesheet" href="../resources/collapsible_menu/css/demo.css" type="text/css"/>
+      <link rel="stylesheet" href="../resources/collapsible_menu/css/github.css" type="text/css"/>
+      <!-- /CSS -->
+   </head>
+   <body>
+      <div id="dcontainer"></div>
+      <script type="text/javascript" src="../resources/js/dialog.js"></script>
+      <!-- JS imports for collapsible menu -->
+      <script src="../resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+      <script src="../resources/js/animation-min.js" type="text/javascript"></script>
+      <script src="../resources/js/template.js" type="text/javascript"></script>
+      <script src="../resources/js/yahoo-min.js" type="text/javascript"></script>
+      <script src="../resources/js/selector-min.js" type="text/javascript"></script>
+      <table id="main-table" border="0" cellspacing="0">
+         <tbody>
+            <tr>
+               <td id="header" colspan="3">
+                  <%
+                     require("template/header_div.jag");
+                     %>
+               </td>
+            </tr>
+            <tr>
+               <%
+                  require("template/product_vertical_menu.jag");
+                  %>
+               <%
+                  require("template/product_menu_panel.jag");
+                  %>
+               <td id="middle-content">
+                  <table id="content-table" border="0" cellspacing="0">
+                     <tbody>
+                        <tr>
+                           <td id="page-header-links">
+                              <table class="page-header-links-table" cellspacing="0">
+                                 <tbody>
+                                    <tr>
+                                       <td class="breadcrumbs">
+                                          <table class="breadcrumb-table" cellspacing="0">
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div id="breadcrumb-div">
+                                                         
+                                                      </div>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </td>
+                                       <td class="page-header-help"><a href="https://localhost:9443/carbon/webapp-list/docs/userguide.jag" target="_blank">Help</a></td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td id="body">
+                              <img src="../resources/images/1px.gif" width="735px" height="1px"/>
+                              <script type="text/javascript">
+                                 var msgId;
+                                 
+                                 msgId = 'MSG13891780124300.19163215448530113';
+                                 
+                              </script>
+                              <script src="../resources/js/logic_build_dashboard.js" type="text/javascript"></script>
+                              <div id="middle">
+                                 <h2>Build</h2>
+                                 <div id="workArea">
+                                    <form name="Features">
+                                       <table class="styledLeft">
+                                          <tbody>
+                                             <tr>
+                                                <td style="border:0; !important">&nbsp;</td>
+                                             </tr>
+                                             <h2>Build Dashboard</h2>
+                                          </tbody>
+                                       </table>
+                                    </form>
+
+                                    <table class="styledLeft" id="WSO2_QAP_BUILD_table" width="100%">
+                                       <col width="10"/>
+                                       <col width="450"/>
+                                       <%
+                                          include("../controller/build_dashboard_onload.jag")
+                                          
+                                          %>
+                                    </table>
+                                    <p>&nbsp;</p>
+                                    <form name="test_results">
+                                       <table class="styledLeft">
+                                          <tbody>
+                                             <tr>
+                                                <td style="border:0; !important">&nbsp;</td>
+                                             </tr>
+                                             <p>&nbsp;</p>
+                                          </tbody>
+                                       </table>
+                                    </form>
+                                    <h2>Test plan for the build</h2>
+                                    <table>
+                                          <tbody>
+                                             <tr>
+                                             <%
+                                                var re_link = "edit_build_dashboard.jag?data=" + WSO2_QAP_BUILD_ID;
+
+                                             %>
+                                                <td><a href=<%=re_link%> id="edit" >Add More Test Results</a></td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+
+                                    <div id="content">
+                                       <a href="./jQuery Collapsible Demo_files/jQuery Collapsible Demo.html" id="closeAll" title="Open all">Open All</a> | <a href="./jQuery Collapsible Demo_files/jQuery Collapsible Demo.html" id="openAll" title="Close All">Close All</a>
+                                       <%
+                                          include("../controller/show_testplan_instance_for_expand.jag");
+                                          %>
+                                    </div>
+                                 </div>
+                              </div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
+            <tr>
+               <%
+                  require("template/footer.jag")
+                  %>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

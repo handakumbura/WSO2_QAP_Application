@@ -1,0 +1,29 @@
+<%
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var WSO2_QAP_JIRA_ID = parse(request.getParameter("data"));
+    var urlDetails  = SERVICE_SECURE_ROOT+"WSO2_QAP_JIRA_DataService/view/jira_by_id/"+WSO2_QAP_JIRA_ID;
+
+   	var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+	var dataDetails = get(urlDetails,"",optionalHeaders);
+	var objDetails = parse(dataDetails.data);
+	var listDetails = objDetails.WSO2_QAP_JIRACollection.WSO2_QAP_JIRA;
+
+    
+if(listDetails != null){
+print("<tr class=\"tableOddRow\"><td>Jira URL</td>");
+if(listDetails.WSO2_QAP_URL.indexOf("http://")!==-1 || (listDetails.WSO2_QAP_URL).indexOf("https://")!==-1){
+
+    print("<td><a href=\""+listDetails.WSO2_QAP_URL+"\" target=\"_blank\" >" + listDetails.WSO2_QAP_URL+ "</td></tr>");
+}
+else{
+print("<td><a href=\"http://"+listDetails.WSO2_QAP_URL+"\" target=\"_blank\" > http://"+listDetails.WSO2_QAP_URL+"</td></tr>");
+}
+print("<tr class=\"tableEvenRow\"><td>Jira Description</td>");
+print("<td>"+listDetails.WSO2_QAP_DESCRIPTION+"</td></tr>");
+}
+ %>

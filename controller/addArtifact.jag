@@ -1,0 +1,30 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var artifact_name = request.getParameter("WSO2_QAP_ARTIFACT_NAME");
+var artifact_description = request.getParameter("WSO2_QAP_ARTIFACT_DESCRIPTION");
+var artifact_location = request.getParameter("WSO2_QAP_LOCATION");
+var param = '{"_postadd_artifacts":{"WSO2_QAP_ARTIFACT_NAME" : "'+artifact_name+'","WSO2_QAP_ARTIFACT_DESCRIPTION" : "'+artifact_description+'","WSO2_QAP_LOCATION" : "'+artifact_location+'"}}';
+//var param = "WSO2_QAP_ARTIFACT_NAME="+artifact_name;
+
+var optionalHeaders = {
+        "Accept":"application/json",
+        	"Content-Type" : "application/json",
+            	"Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_ARTIFACT_DataService/add/artifacts";
+
+if(artifact_name===null){
+
+	response.sendRedirect("../view/add_artifact.jag");
+}
+else{
+	post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+	
+	response.sendRedirect("../view/artifacts_home.jag");
+}
+
+%>

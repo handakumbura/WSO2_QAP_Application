@@ -1,0 +1,36 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var temp=request.getAllParameters();
+// print(temp)
+
+var WSO2_QAP_FEATURE_ID=temp.feature;
+
+var WSO2_QAP_TEST_SUIT_NAME=temp.WSO2_QAP_TEST_SUIT_NAME;
+
+var optionalHeaders = {
+        "Accept":"application/json",
+            "Content-Type" : "application/json",
+                "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_DataService/add/test_suit";                
+
+var param = '{"_postadd_test_suit":{"WSO2_QAP_TEST_SUIT_NAME" : "'+WSO2_QAP_TEST_SUIT_NAME+'","WSO2_QAP_FEATURE_ID" : "'+WSO2_QAP_FEATURE_ID+'"}}';
+
+var redirParam = '{"verid_proname_planid" : {"WSO2_QAP_TEST_PLAN_ID" : "'+temp.WSO2_QAP_TEST_PLAN_ID+'", "WSO2_QAP_PRODUCT_NAME" : "'+temp.WSO2_QAP_PRODUCT_NAME+'", "WSO2_QAP_PRODUCT_VERSION" : "'+temp.WSO2_QAP_PRODUCT_VERSION+'"}}';
+
+var redirParam2 = '{"WSO2_QAP_TEST_PLAN_ID" : "'+temp.WSO2_QAP_TEST_PLAN_ID+'", "WSO2_QAP_PRODUCT_NAME" : "'+temp.WSO2_QAP_PRODUCT_NAME+'", "WSO2_QAP_PRODUCT_VERSION" : "'+temp.WSO2_QAP_PRODUCT_VERSION+'"}';
+
+if(temp.WSO2_QAP_TEST_SUIT_NAME.length==0){
+ response.sendRedirect("../view/add_test_suit.jag?data="+encodeURIComponent(stringify(redirParam)));
+}
+else{
+ post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+  
+ response.sendRedirect("../view/add_plan_suit_mappings.jag?data="+encodeURIComponent(stringify(redirParam2)));
+}
+
+%>

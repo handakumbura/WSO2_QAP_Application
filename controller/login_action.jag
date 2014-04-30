@@ -1,0 +1,40 @@
+<%
+
+var username = request.getParameter("username");
+var  password = request.getParameter("password");
+
+var split = username.split("@");
+
+
+if(split[1] == null){
+    split[1] = "wso2.com"
+
+}
+
+var email = split[0]+"@"+split[1];
+
+var ldapAuth = Packages.com.sudheera.ldapLogin;
+var ldapAuthentication = new ldapAuth();
+
+var LdapConnector = Packages.org.wso2.carbon.ldap.user.LDAPConnector;
+var connector = new LdapConnector();
+var username = connector.getUIDForEmail(email);
+
+
+var resultArray = ldapAuthentication.ldapAuth(username,password);
+
+
+
+
+
+if(resultArray == true){
+    session.put("username",username);
+    session.put("role", "admin");
+
+    response.sendRedirect("../view/products_home.jag");
+}
+else{
+    response.sendRedirect("../view/login.jag?login=false");
+}
+
+%>

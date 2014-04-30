@@ -1,0 +1,21 @@
+<%
+include("base64_encode.jag");
+var REDMINE_BASE_URL = 'https://redmine.wso2.com/';
+
+var param = "";
+
+var username = request.getParameter("username");
+var password = request.getParameter("password");
+//print(password);
+
+var optionalHeaders = {
+        "Accept":"application/json",
+    	"Authorization": "Basic "+base64_encode(username+":"+password) };
+
+
+var url = REDMINE_BASE_URL + 'issues.json?status_id=*&offset=0&limit=1';
+
+var data = get(url,"",optionalHeaders);
+var obj = JSON.parse(data.data);
+print(obj);
+%>

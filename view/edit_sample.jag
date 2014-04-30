@@ -1,0 +1,183 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<%
+var name = session.get("username");
+if(name===null){
+    response.sendRedirect("login.jag");
+}
+require("template/head.jag");
+%>
+
+
+</head>
+<body>
+	<noscript>
+		<div class="something-wrong">
+			<div class="title">JavaScript is disabled on your browser</div>
+			<div class="content">Please enable JavaScript or upgrade to a
+				JavaScript-capable browser to use WSO2 Products.</div>
+		</div>
+	</noscript>
+	<div id="dcontainer"></div>
+	<script type="text/javascript" src="../resources/js/dialog.js"></script>
+	<script type="text/javascript" src="../resources/js/jquery-ui.js"></script>
+
+	<script src="../resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+	<script src="../resources/js/animation-min.js" type="text/javascript"></script>
+	<script src="../resources/js/template.js" type="text/javascript"></script>
+	<script src="../resources/js/yahoo-min.js" type="text/javascript"></script>
+	<script src="../resources/js/selector-min.js" type="text/javascript"></script>
+
+
+
+
+
+	<table id="main-table" border="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td id="header" colspan="3">
+				<%
+require("template/header_div.jag");
+%>
+</td>
+</tr>
+<tr>
+<%
+require("template/product_vertical_menu.jag");
+%>
+<%
+require("template/product_menu_panel.jag");
+%>
+
+
+<td id="middle-content">
+    <table id="content-table" border="0" cellspacing="0">
+        <tbody>
+            <tr>
+                <td id="page-header-links">
+                    <table class="page-header-links-table" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td class="breadcrumbs">
+                                    <table class="breadcrumb-table" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div id="breadcrumb-div">
+                                                        
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <td class="page-header-help"><a href="./docs/userguide.html"
+                                    target="_blank">Help</a></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td id="body"><img src="../admin/images/1px.gif" width="735px"
+                    height="1px">
+
+                <div id="middle">
+                        <h2>Edit Sample</h2>
+                        <%
+
+include("../controller/base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var optionalHeaders = {
+    "Accept":"application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var params = request.getAllParameters("UTF-8");
+var list = params.WSO2_QAP_SAMPLE_ID;
+
+var url_sampleDetails=SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_DataService/view/samples_with_id/"+list;
+var data_sample=get(url_sampleDetails,"",optionalHeaders);
+var obj_sample=parse(data_sample.data);
+var list_sample=obj_sample.WSO2_QAP_SAMPLECollection.WSO2_QAP_SAMPLE;
+
+%>
+
+<div id="workArea">
+    <form name="add_sample" method="post"  action="../controller/editSample.jag"
+        >
+        <table class="styledLeft" id="archiveTbl">
+ <input type="hidden" id="WSO2_QAP_SAMPLE_ID" name="WSO2_QAP_SAMPLE_ID" value="<%=list_sample.WSO2_QAP_SAMPLE_ID%>">
+            <tbody>
+
+<tr class="tableEvenRow">
+<td class="formRow">Sample name<font color="red">*</font>
+</td>
+<td><input type="text" id="WSO2_QAP_SAMPLE_NAME" name="WSO2_QAP_SAMPLE_NAME"
+     onchange=""  value="<%=list_sample.WSO2_QAP_SAMPLE_NAME%>">
+
+</td>
+</tr>
+<tr class="tableOddRow">
+<td class="formRow">Sample URL<font color="red">*</font>
+</td>
+<td><input type="text" id="WSO2_QAP_SAMPLE_URL" name="WSO2_QAP_SAMPLE_URL"
+     value="<%= list_sample.WSO2_QAP_SAMPLE_URL%>">
+
+</td>
+</tr>
+<tr class="tableEvenRow">
+<td class="formRow">Description<font color="red">*</font>
+</td>
+
+<td>
+    <textarea rows="4" cols="50" name="WSO2_QAP_DESCRIPTION"  id="WSO2_QAP_DESCRIPTION">
+    </textarea>
+</td>
+<script type="text/javascript">
+ document.getElementById("WSO2_QAP_DESCRIPTION").value="<%= list_sample.WSO2_QAP_DESCRIPTION %>";
+
+ </script>
+</tr>
+
+
+</tbody>
+</table>
+<table class="styledLeft">
+<tbody>
+<tr>
+<td class="buttonRow" colspan="2"><input name="upload"
+    type="submit" class="button" value=" Submit "
+    onclick="submitForm();"> <input type="button"
+        class="button"
+        onclick="location.href='sample_home.jag';"
+        value=" Cancel ">
+
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+
+</tr>
+<tr>
+<% 
+require("template/footer.jag")
+%>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

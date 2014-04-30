@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+   <%
+   var name = session.get("username");
+   require("template/head.jag");
+  %>
+</head>
+
+ <body>
+         <!-- datatables imports start  -->
+
+        <style type="text/css" title="currentStyle">
+      @import "../resources/datatables/css/page.css";
+      @import "../resources/datatables/css/table.css";
+    </style>
+
+    <!--<script type="text/javascript" language="javascript" src="../resources/datatables/js/table_jquery.js"></script> -->
+    <script type="text/javascript" language="javascript" src="../resources/datatables/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        $('#BuildResultsTable').dataTable( {
+          "sPaginationType": "full_numbers"
+        } );
+      } );
+    </script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        $('#testPlanTable').dataTable( {
+          "sPaginationType": "full_numbers"
+        } );
+      } );
+    </script>
+
+    <!-- datatables imports end -->
+
+   <noscript>
+      <div class="something-wrong">
+         <div class="title">JavaScript is disabled on your browser</div>
+         <div class="content">Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.</div>
+      </div>
+   </noscript>
+
+      <div id="dcontainer"></div>
+      <script type="text/javascript" src="../resources/js/dialog.js"></script>
+      <!-- JS imports for collapsible menu -->
+      <script src="../resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+      <script src="../resources/js/animation-min.js" type="text/javascript"></script>
+      <script src="../resources/js/template.js" type="text/javascript"></script>
+      <script src="../resources/js/yahoo-min.js" type="text/javascript"></script>
+      <script src="../resources/js/selector-min.js" type="text/javascript"></script>
+      <table id="main-table" border="0" cellspacing="0">
+         <tbody>
+            <tr>
+               <td id="header" colspan="3">
+                  <div id="header-div">
+                     <div class="right-logo">QA Portal</div>
+                     <div class="left-logo">
+                        <a href="../index.jag" class="header-home"><img src="../resources/images/1px.gif" width="300px" height="32px"></a>
+                     </div>
+                     <div class="middle-ad">
+                     </div>
+                     <div class="header-links">
+                        <div class="right-links">
+                           <ul>
+                              <li class="middle">
+                                 <label id="logged-user">
+                                    <strong>Signed-in as:</strong>&nbsp;
+                                       <%
+                                             print(name);
+                                       %>
+
+
+                                 </label>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="right">
+                                 <a href="../controller/logout_action.jag">Sign-out</a>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="middle">
+                                 <a target="_blank" href="/AS521/WSO2+Application+Server+Documentation">Docs</a>
+                              </li>
+                              <li class="middle">|</li>
+                              <li class="left">
+                                 <a target="_blank" href="/docs/about.jag">About</a>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </td>
+            </tr>
+            <tr id="middle-container-tr">
+               <%
+                include("template/product_vertical_menu.jag");
+               %>
+               <%
+                include("template/product_menu_panel.jag");
+               %>
+
+               <td id="middle-content">
+                  <table id="content-table" border="0" cellspacing="0">
+                     <tbody>
+                        <tr>
+                           <td id="page-header-links">
+                              <table class="page-header-links-table" cellspacing="0">
+                                 <tbody>
+                                    <tr>
+                                       <td class="breadcrumbs">
+                                          <table class="breadcrumb-table" cellspacing="0">
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div id="breadcrumb-div">
+                                                         
+                                                      </div>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </td>
+                                       <td class="page-header-help"><a href="https://localhost:9443/carbon/webapp-list/docs/userguide.jag" target="_blank">Help</a></td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td id="body">
+                              <img src="../resources/images/1px.gif" width="735px" height="1px">
+                              <script src="../resources/js/logic_test_plan_dashboard.js" type="text/javascript"></script>
+                              <script type="text/javascript">
+                              setCookie('current-breadcrumb', 'manage_menu,webapps_menu,webapps_list_menu#');
+                                
+                              </script>
+
+                                   <div id="middle">
+                                    <%
+                                        var req_data = request.getParameter("data");
+                                        json_data = parse(decodeURIComponent(req_data));
+                                        jd2=parse(json_data).verid_proname_planid;
+                                        print("<h2>");
+                                        print("Test Plan for "+jd2.WSO2_QAP_PRODUCT_NAME+" "+jd2.WSO2_QAP_PRODUCT_VERSION);
+                                        print("</h2>");
+                                    %>
+                                    <div id="workArea">
+
+                                    
+                                    <%
+                                      var passjsondata='{"WSO2_QAP_TEST_PLAN_ID" : "'+jd2.WSO2_QAP_TEST_PLAN_ID+'","WSO2_QAP_PRODUCT_NAME" : "'+jd2.WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION" : "'+jd2.WSO2_QAP_PRODUCT_VERSION+'"}';
+                                       var link_redir = "location.href = 'add_plan_suit_mappings.jag?data="+encodeURIComponent(stringify(passjsondata))+"'";
+                                    %>
+                                    <div>
+                                    <h2>Test Suits</h2>
+                                       <table>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <!--<input type="button" value="Add Test Suit" onclick="<% print(link_redir); %>"></label>-->
+                                                   <p>&nbsp;</p>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                    <table>
+                                          <tbody>
+                                             <tr>
+                                                <td><a href="#" onclick="selectAllInPlanTable(true);return false;" style="cursor:pointer">Select all in this page</a>&nbsp;<b>|</b>&nbsp;</td>
+                                                <td><a href="#" onclick="selectAllInPlanTable(false);return false;" style="cursor:pointer">Select none</a></td>
+                                                <td width="20%">&nbsp;</td>
+                                                <td><a href="#" id="delete1" onclick="deleteTestPlans();return false;">Delete</a></td>
+                                                <td><a href="#" id="add2" onclick="<% print(link_redir); %>">Add Test Suits</a></td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                    <form name="testPlanForm">
+                                          <table class="display" id="testPlanTable" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                             <thead>
+                                                <tr>
+                                                   <th>&nbsp;</th>
+                                                   <th>
+                                                      <nobr>Test Suit Name</nobr>
+                                                   </th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                <%
+                                                   include("../controller/test_plan_dashboard_onload_testsuit_table.jag");
+                                                %>
+                                             </tbody>
+                                          </table>
+                                          <%
+                                            print('<input type="hidden" name="WSO2_QAP_TEST_PLAN_ID" value="'+jd2.WSO2_QAP_TEST_PLAN_ID+'">');
+                                            print('<input type="hidden" name="WSO2_QAP_PRODUCT_NAME" value="'+jd2.WSO2_QAP_PRODUCT_NAME+'">');
+                                            print('<input type="hidden" name="WSO2_QAP_PRODUCT_VERSION" value="'+jd2.WSO2_QAP_PRODUCT_VERSION+'">');
+
+                                          %>
+                                       </form>
+                                       <p>&nbsp;</p>
+                                       <table>
+                                          <tbody>
+                                             <tr>
+                                                <td><a href="#" onclick="selectAllInPlanTable(true);return false;" style="cursor:pointer">Select all in this page</a>&nbsp;<b>|</b>&nbsp;</td>
+                                                <td><a href="#" onclick="selectAllInPlanTable(false);return false;" style="cursor:pointer">Select none</a></td>
+                                                <td width="20%">&nbsp;</td>
+                                                <td><a href="#" id="delete1" onclick="deleteTestPlans();return false;">Delete</a></td>
+                                                <td><a href="#" id="add2" onclick="<% print(link_redir); %>">Add Test Suits</a></td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                    </div>
+                                    <p>&nbsp;</p>
+                                     <p>&nbsp;</p>
+                                    <h2>Builds for Test plan</h2>
+                                    <p>&nbsp;</p>
+                                    <div>
+                                      <form name="buildResultsForm">
+                                          <table class="display" id="BuildResultsTable" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                             <thead>
+
+                                                <tr>
+                                                   <th>
+                                                      <nobr>Build Name</nobr>
+                                                   </th>
+                                                   <th>
+                                                      <nobr>Build Date</nobr>
+                                                   </th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                <%
+                                                   include("../controller/test_plan_dashboard_onload_testresults_table.jag");
+                                                %>
+                                             </tbody>
+                                          </table>
+                                       </form>
+                                       <p>&nbsp;</p>
+                                    </div>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+               <tr>
+        <% 
+        require("template/footer.jag")
+        %>
+      </tr>
+      </tbody>
+   </table>
+   <script type="text/javascript">
+   if (Function('/*@cc_on return document.documentMode===10@*/')()){
+     document.documentElement.className+=' ie10';
+  }
+  </script>
+</body>
+</html>

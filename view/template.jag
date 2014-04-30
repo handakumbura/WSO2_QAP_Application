@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <%
+         require("../const.jag");
+         var name = session.get("username");
+         if(name===null){
+           response.sendRedirect("login.jag");
+         }
+           require("template/head.jag");
+         %>
+   </head>
+   <body>
+      <noscript>
+         <div class="something-wrong">
+            <div class="title">JavaScript is disabled on your browser</div>
+            <div class="content">Please enable JavaScript or upgrade to a JavaScript-capable browser to use WSO2 Products.</div>
+         </div>
+      </noscript>
+      <div id="dcontainer"></div>
+      <script type="text/javascript" src="../resources/js/dialog.js"></script>
+      <!-- JS imports for collapsible menu -->
+      <script src="../resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+      <script src="../resources/js/animation-min.js" type="text/javascript"></script>
+      <script src="../resources/js/template.js" type="text/javascript"></script>
+      <script src="../resources/js/yahoo-min.js" type="text/javascript"></script>
+      <script src="../resources/js/selector-min.js" type="text/javascript"></script>
+      <table id="main-table" border="0" cellspacing="0">
+         <tbody>
+            <tr>
+               <td id="header" colspan="3">
+                  <%
+                    include("template/header_div.jag");
+                  %>
+               </td>
+            </tr>
+            <tr id="middle-container-tr">
+               <%
+                include("template/product_vertical_menu.jag");
+               %>
+               <%
+                include("template/product_menu_panel.jag");
+               %>
+
+
+              <td>
+
+
+                <h2>Workinng Area</h2>
+
+
+              </td>  
+
+            </tr>
+            <tr>
+               <% 
+                  include("template/footer.jag")
+                  %>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

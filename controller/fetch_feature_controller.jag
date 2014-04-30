@@ -1,0 +1,144 @@
+<%
+	include("base64_encode.jag");
+
+	
+	
+	var REDMINE_BASE_URL = "https://redmine.wso2.com/";
+	var username = "redmineuser@wso2.com";
+	var password = "yha2Pj8zBs9cA";
+	
+	var DB_URL = session.get("service_secure_root");
+	
+	var product = request.getParameter("prodSelected");
+	var version = request.getParameter("verSelected");
+	
+
+	
+	//redmine API params
+	var offset = 0;
+	var limit = 1000;//number of issues to be included in response
+	
+	var optionalHeaderRedmine = {
+	        "Accept":"application/json",
+	    	"Authorization": "Basic "+base64_encode(username+":"+password) };
+		
+	var optionalHeadersDb = {
+		        "Accept":"application/json",
+		    	"Authorization": "Basic "+base64_encode('admin:admin') };
+		
+	//consuming redmine API, getting issuesObj
+	var redmineGetReqString = REDMINE_BASE_URL+'issues.json?status_id=*&offset='+offset+'&limit='+limit;
+	var dataRedmine = get(redmineGetReqString,"",optionalHeaderRedmine);
+	var objectRedmine = parse(dataRedmine.data);
+	var issuesList = objectRedmine.issues;
+	
+	
+	var redmineUrlforSelectedIssue;
+	var redmineDescription;
+	var redmineSubject;
+	var featureID;
+	for(var x=0;x<issuesList.length;x++)
+	{
+				
+		if(issuesList[x].project.name==product && issuesList[x].fixed_version.name==version)
+		{
+			
+			redmineUrlforSelectedIssue = REDMINE_BASE_URL+"issues/"+issuesList[x].id;
+			
+			
+			
+			
+			//preparing desc string if available
+			if(issuesList[x].description == null)
+			{
+				redmineDescription = "n/a";
+			}
+			else if(issuesList[x].description.length>498)
+			{
+				var val = issuesList[x].description.slice(0,497)+"..";
+				redmineDescription = val;
+				
+			}
+			else 
+			{
+				redmineDescription = issuesList[x].description;
+			}
+			
+			
+			//preparing subj string
+			if(issuesList[x].subject.length>98)
+			{
+				var val2 = issuesList[x].subject.slice(0,97)+"..";
+				redmineSubject= val2;
+			}
+			else 
+			{
+				redmineSubject=issuesList[x].subject;
+			}
+			
+			
+			//using service to fetch feature with matching reredmine URL
+			
+			var redmineFetURL = DB_URL+"WSO2_QAP_FEATURE_DataService/get/feature_with_redmine/"+redmineUrlforSelectedIssue;
+			var dataFeature = get(redmineFetURL,"",optionalHeadersDb);
+			var objectFeature = parse(dataFeature.data);
+			var feature = objectFeature.WSO2_QAP_FEATURECollection.WSO2_QAP_FEATURE;
+			
+			
+			if(feature==null)
+			{
+				//inserting new feature and version mapping feature records to database.
+				
+				var insertFeatURL = DB_URL+"WSO2_QAP_InsertFeature/feature";
+				var requestParam2 = {WSO2_QAP_DESCRIPTION: redmineDescription, WSO2_QAP_REDMINE_URL: redmineUrlforSelectedIssue, WSO2_QAP_SUBJECT: redmineSubject };
+				
+				
+				var dataFeatureId=get(insertFeatURL,requestParam2,optionalHeadersDb);
+				var objectFeatureId=parse(dataFeatureId.data);
+				print(objectFeatureId);
+				
+				
+				var generatedFeatureID=objectFeatureId.GeneratedKeys.Entry.ID;
+				
+				
+				
+				
+				var insertVerFeatURL = DB_URL+"WSO2_QAP_InsertVersionFeatureMapping/feature";
+				var requestParam3 ={WSO2_QAP_PRODUCT_VERSION: version, WSO2_QAP_PRODUCT_NAME: product, WSO2_QAP_FEATURE_ID: generatedFeatureID};
+				
+				var obj = get(insertVerFeatURL,requestParam3,optionalHeadersDb);
+				
+				
+			}
+			else 
+			{ 
+				//updating feature on database.
+				var updateFeatURL = DB_URL+"WSO2_QAP_UpdateFeature/feature";
+				var featureID = feature.WSO2_QAP_FEATURE_ID; 				
+			
+				var requestParam={WSO2_QAP_DESCRIPTION: redmineDescription, WSO2_QAP_SUBJECT: redmineSubject, WSO2_QAP_FEATURE_ID: featureID};
+				
+				var dataVersions=get(updateFeatURL, requestParam, optionalHeadersDb);
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+		}
+	}
+	
+	//redirect to feature home
+	response.sendRedirect("../view/feature_home.jag");
+	
+	
+	
+	
+
+	
+	
+%>

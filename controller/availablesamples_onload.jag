@@ -1,0 +1,100 @@
+<%
+
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_FEATURE_MAPPING_DataService/view/samples_without_featureid/"+json_data;
+
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var param ="";
+
+var data = get(url,param,optionalHeaders);
+
+var obj = parse(data.data);
+
+
+var list1=obj.WSO2_QAP_SAMPLE_FEATURE_MAPPINGCollection.WSO2_QAP_SAMPLE_FEATURE_MAPPING;
+
+
+if(list1==null){
+    print('<tr>');
+    print('<td>No available features for this sample</td>');
+    print('<td></td>');
+    print('<td></td>');
+    print('<td></td>');
+    print('</tr>');
+}
+
+else if(!(list1 instanceof Array)){
+
+   var url2=SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_DataService/view/samples_with_id/"+list1.WSO2_QAP_SAMPLE_ID;
+    var param2=""
+    var data2=get(url2,param2,optionalHeaders);
+
+    var obj2 = parse(data2.data);
+
+    var list2=obj2.WSO2_QAP_SAMPLECollection.WSO2_QAP_SAMPLE;
+
+
+
+    print('<tr valign="middle">');
+    print(' <td style="text-align:center; !important" width="10px">');
+    print('    <input name="WSO2_QAP_SAMPLE_ID" value="'+list2.WSO2_QAP_SAMPLE_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+    print(' </td>');
+
+    print(' <td>');
+    var link = "view_sample.jag?data="+encodeURIComponent(stringify(list2.WSO2_QAP_SAMPLE_ID));
+    print('<a href="'+link+'">');
+    print("&emsp;&emsp;&emsp;");
+    print(list2.WSO2_QAP_SAMPLE_NAME );
+    print('</a>');
+    print('</td>');
+
+    print(' <td>');
+    print("&emsp;&emsp;&emsp;");
+    print(list2.WSO2_QAP_DESCRIPTION );
+    print('</a>');
+    print('</td>');
+
+}
+else{
+
+for (var i=0;i<list1.length;i++){
+
+    var url2=SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_DataService/view/samples_with_id/"+list1[i].WSO2_QAP_SAMPLE_ID;
+    var param2=""
+    var data2=get(url2,param2,optionalHeaders);
+
+    var obj2 = parse(data2.data);
+
+    var list2=obj2.WSO2_QAP_SAMPLECollection.WSO2_QAP_SAMPLE;
+
+    print('<tr valign="middle">');
+    print(' <td style="text-align:center; !important" width="10px">');
+    print('    <input name="WSO2_QAP_SAMPLE_ID" value="'+list2.WSO2_QAP_SAMPLE_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+    print(' </td>');
+
+    print(' <td>');
+    var link = "view_sample.jag?data="+encodeURIComponent(stringify(list2.WSO2_QAP_SAMPLE_ID));
+    print('<a href="'+link+'">');
+    print("&emsp;&emsp;&emsp;");
+    print(list2.WSO2_QAP_SAMPLE_NAME);
+    print('</a>');
+    print('</td>');
+
+    print(' <td>');
+    print("&emsp;&emsp;&emsp;");
+    print(list2.WSO2_QAP_DESCRIPTION );
+    print('</a>');
+    print('</td>');
+
+}
+
+}
+
+
+%>

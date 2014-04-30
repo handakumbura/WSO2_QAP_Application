@@ -1,0 +1,37 @@
+<%
+//var params = request.getAllParameters("UTF-8");
+//print(params);
+
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+
+var params1 = request.getAllParameters("UTF-8");
+var list3 = params1.testplanID;
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+
+ if(!(list3 instanceof Array)){
+    var url3 = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_DataService/delete/version_test_plans/"+list3;
+         del(url3, "", optionalHeaders, "json", function (data, xhr) {
+         log("Response received");
+    } );
+    }
+    else{
+
+        for (var i=0;i<list3.length;i++){
+            var url3 = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_PLAN_DataService/delete/version_test_plans/"+list3[i];
+
+            del(url3, "", optionalHeaders, "json", function (data, xhr) {
+                log("Response received");
+            } );
+
+            
+        }
+    }
+
+response.sendRedirect("../view/product_version_dashboard.jag?data="+params1.WSO2_QAP_PRODUCT_VERSION_ID);
+
+%>

@@ -1,0 +1,52 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var product_name = request.getParameter("WSO2_QAP_PRODUCT_NAME");
+var product_id = request.getParameter("WSO2_QAP_PRODUCT_ID");
+
+// var param = '{"_postadd_products":{"WSO2_QAP_PRODUCT_NAME" : "'+product_name+'"}}';
+if((product_id == null)){
+var param = "WSO2_QAP_PRODUCT_NAME="+product_name;
+
+var optionalHeaders = {
+        "Accept":"application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_DataService/add/products";
+
+if(product_name===null){
+
+	response.sendRedirect("../view/add_product.jag");
+}
+else{
+	post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+	
+	response.sendRedirect("../view/products_home.jag");
+}
+}
+else{
+	var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_DataService/edit/product/"+product_id;
+	var optionalHeaders = {
+        "Accept":"application/json",
+            "Content-Type" : "application/json",
+                "Authorization": "Basic "+base64_encode("admin:admin") };
+    var param = '{"_putedit_products":{"WSO2_QAP_PRODUCT_NAME" : "'+product_name+'","WSO2_QAP_PRODUCT_ID" : "'+product_id+'"}}';
+    if(product_name===null){
+
+	response.sendRedirect("../view/add_product.jag");
+}
+else{
+
+	put(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+	
+	response.sendRedirect("../view/products_home.jag");
+}
+}
+
+
+%>

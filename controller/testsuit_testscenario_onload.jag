@@ -1,0 +1,66 @@
+<%
+   // print(list);
+
+   // print('<input type="hidden" name="WSO2_QAP_PRODUCT_VERSION_ID" value="'+WSO2_QAP_PRODUCT_VERSION_ID+'">');
+   var url2 = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_DataService/get/testsuit_join_testscenario_by_testsuit_id/"+WSO2_QAP_TEST_SUIT_ID;
+
+   var data2 = get(url2,"",optionalHeaders);
+   var obj2 = parse(data2.data);
+   // print(obj2)
+   var list2 = obj2.WSO2_QAP_DATA_TESTSUIT_join_TESTSCENARIOCollection.WSO2_QAP_DATA_TESTSUIT_join_TESTSCENARIO;
+
+
+
+   if(list2.length==null && list2.WSO2_QAP_TEST_SCENARIO_NAME!=null){
+
+        print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="testScenarioId" value="'+list2.WSO2_QAP_TEST_SCENARIO_ID+'" onclick="resetVarsTestScenario()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        var link = "test_scenario_dashboard.jag?data="+encodeURIComponent(stringify(list2.WSO2_QAP_TEST_SCENARIO_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list2.WSO2_QAP_TEST_SCENARIO_NAME );
+
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        print(list2.WSO2_QAP_DESCRIPTION );
+        print('</td>');
+        print('</tr>');
+
+    }
+    else{
+        for (var i=0;i<list2.length;i++)
+        {
+
+          if(i%2==1){
+            print('<tr bgcolor="#EEEFFB">');
+          }
+          else{
+            print('<tr>');
+          }
+        print(' <td style="text-align:center; !important" width="10px">');
+
+        print('    <input name="testScenarioId" value="'+list2[i].WSO2_QAP_TEST_SCENARIO_ID+'" onclick="resetVarsTestScenario()" class="chkBox" type="checkbox">');
+        print(' </td>');
+// print(list2[i].WSO2_QAP_TEST_SCENARIO_ID)
+        print(' <td>');
+        var link = "test_scenario_dashboard.jag?data="+encodeURIComponent(stringify(list2[i].WSO2_QAP_TEST_SCENARIO_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list2[i].WSO2_QAP_TEST_SCENARIO_NAME );
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        print(list2[i].WSO2_QAP_DESCRIPTION );
+        print('</td>');
+        print('</tr>');
+
+        }
+   }
+
+   // print(list2);
+%>   

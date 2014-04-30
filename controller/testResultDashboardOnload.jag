@@ -1,0 +1,32 @@
+<%
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var WSO2_QAP_TEST_RESULT_ID = parse(request.getParameter("data"));
+    var urlResultDetails  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/view/testresult_by_id/"+WSO2_QAP_TEST_RESULT_ID;
+
+   	var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+	var dataResultDetails = get(urlResultDetails,"",optionalHeaders);
+	var objResultDetails = parse(dataResultDetails.data);
+	var listResultDetails = objResultDetails.WSO2_QAP_TEST_RESULTCollection.WSO2_QAP_TEST_RESULT;
+
+    var urlCaseDetails  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/view/testcase_by_id/"+listResultDetails.WSO2_QAP_TEST_CASE_ID;
+    var dataCaseDetails = get(urlCaseDetails,"",optionalHeaders);
+    var objCaseDetails = parse(dataCaseDetails.data);
+    var listCaseDetails = objCaseDetails.WSO2_QAP_TEST_CASECollection.WSO2_QAP_TEST_CASE;
+
+if(listResultDetails != null){
+print("<tr class=\"tableOddRow\"><td>Test Case Name</td>");
+print("<td>"+listCaseDetails.WSO2_QAP_TEST_CASE_NAME+"</td></tr>");
+print("<tr class=\"tableEvenRow\"><td>Status</td>");
+print("<td>"+listResultDetails.WSO2_QAP_TEST_STATUS+"</td></tr>");
+print("<tr class=\"tableOddRow\"><td>Automation Test Result</td>");
+print("<td>"+listResultDetails.WSO2_QAP_AUTOMATION_TEST_RESULT+"</td></tr>");
+print("<tr class=\"tableEvenRow\"><td>Tested By</td>");
+print("<td>"+listResultDetails.WSO2_QAP_TESTED_BY+"</td></tr>");
+
+}
+ %>

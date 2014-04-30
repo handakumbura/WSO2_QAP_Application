@@ -1,0 +1,60 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var jira_url = request.getParameter("WSO2_QAP_URL");
+//print(jira_url);
+var test_result_id = request.getParameter("WSO2_QAP_TEST_RESULTS_ID");
+var build_id=request.getParameter("WSO2_QAP_BUILD_ID");
+//print(test_result_id);
+//print(build_id);
+var jira_description = request.getParameter("WSO2_QAP_DESCRIPTION");
+var param = '{"_postadd_jira":{"WSO2_QAP_URL" : "'+jira_url+'","WSO2_QAP_DESCRIPTION" : "'+jira_description+'"}}';
+
+var optionalHeaders = {
+        "Accept":"application/json",
+         "Content-Type" : "application/json",
+             "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_JIRA_DataService/add/jira";
+var xhr = new XMLHttpRequest();
+xhr.open("POST", url);
+xhr.setRequestHeader("Content-Type" , "application/json");
+xhr.send(param);
+//print("<br>ReadyState : "+xhr.readyState);
+//print("<br>ResponseStatus : "+xhr.status);
+//print("<br>ResponseText : "+xhr.responseText);
+var objjiranew = parse(xhr.responseText);
+if(objjiranew.GeneratedKeys != null){
+var listjiranew = objjiranew.GeneratedKeys.Entry;
+jiraId = listjiranew.ID;
+}else{
+jiraId= null;
+}
+
+var param1 = '{"_postadd_jira_results":{"WSO2_QAP_JIRA_ID" : "'+jiraId+'","WSO2_QAP_TEST_RESULT_ID" : "'+test_result_id+'"}}';
+var url1 = SERVICE_SECURE_ROOT+"WSO2_QAP_JIRA_MAPPING_TESTRESULT_DataService/add/jira_results";
+//print('<br/>');
+//print('<br/>');
+//print("inserted new id " + jiraId);
+//print('<br/>');
+/*var url2=SERVICE_SECURE_ROOT+"WSO2_QAP_JIRA_DataService/get/jira_id"
+var data = get(url2,param,optionalHeaders);
+var obj = parse(data.data);
+var list=obj.GeneratedKeys.Entry;
+print(list);*/
+
+if(jira_url===null){
+
+response.sendRedirect("../view/add_jira.jag");
+}
+else{
+post(url1, param1, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+
+response.sendRedirect("../view/edit_test_result.jag?"+'data='+encodeURIComponent(test_result_id)+'&build_id='+encodeURIComponent(build_id));
+}
+
+%>
+

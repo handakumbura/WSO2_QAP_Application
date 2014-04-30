@@ -1,0 +1,64 @@
+<%
+
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var sampleName=request.getParameter("WSO2_QAP_SAMPLE_NAME");
+var sampleURL=request.getParameter("WSO2_QAP_SAMPLE_URL");
+var description=request.getParameter("WSO2_QAP_DESCRIPTION");
+var feature_id=request.getParameter("WSO2_QAP_FEATURE_ID");
+
+
+
+var param='{"_postadd_samples":{"WSO2_QAP_SAMPLE_NAME" : "'+sampleName+'","WSO2_QAP_DESCRIPTION" : "'+description+'","WSO2_QAP_SAMPLE_URL" : "'+sampleURL+'"}}';
+
+
+var optionalHeaders = {
+    "Accept":"application/json",
+    "Content-Type" :"application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_DataService/add/samples";
+
+
+if(sampleName===""||description==="")
+{
+    response.sendRedirect("../view/add_sample.jag");
+}
+
+else{
+    
+     var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type" , "application/json");
+    xhr.setRequestHeader("Accept" , "application/json");
+    xhr.send(param);
+
+    var result_json =  parse(xhr.responseText);
+        print(result_json.GeneratedKeys.Entry.ID);
+        WSO2_QAP_SAMPLE_ID = result_json.GeneratedKeys.Entry.ID;
+}
+
+var optionalHeaders1 = {
+    "Accept":"application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var param2='{"_postadd_featureswithsamples":{"WSO2_QAP_SAMPLE_ID" : "'+WSO2_QAP_SAMPLE_ID+'","WSO2_QAP_FEATURE_ID" : "'+feature_id+'"}}';
+
+var url2 = SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_FEATURE_MAPPING_DataService/add/featureswithsamples";
+
+if(feature_id==null)
+{
+    print("blank1");
+    response.sendRedirect("../view/add_sample.jag");
+}
+
+else{
+    post(url2, param2, optionalHeaders, "json",  function (data, xhr) {
+        log("Response received");
+
+    } );
+    response.sendRedirect("../view/sample_home.jag");
+}
+
+%>

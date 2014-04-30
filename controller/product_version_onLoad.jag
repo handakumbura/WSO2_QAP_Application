@@ -1,0 +1,76 @@
+<%
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+    var product_id = json_data.WSO2_QAP_PRODUCT_ID;
+
+    var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_DataService/get/version_by_id/"+product_id;
+
+           var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+        var data = get(url,"",optionalHeaders);
+
+
+        var obj = parse(data.data);
+    //print(obj);
+
+
+        var list = obj.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION;
+
+        if(list.length==0){
+            print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+        
+        print(' </td>');
+
+        print(' <td>');
+        
+        print('</td>');
+        print('</tr>');
+
+        }
+        else{
+
+
+    if(!(list instanceof Array)){
+
+
+        print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="versionId" value="'+list.WSO2_QAP_PRODUCT_VERSION_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        print('    <a href="product_version_dashboard.jag?data='+encodeURIComponent(stringify(list.WSO2_QAP_PRODUCT_VERSION_ID))+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(json_data.WSO2_QAP_PRODUCT_NAME+"&emsp;&emsp;V"+list.WSO2_QAP_PRODUCT_VERSION);
+        print('</a>');
+        print('</td>');
+        print('</tr>');
+
+    }
+
+        for (var i=0;i<list.length;i++)
+        {
+
+        print('<tr>');
+        print('<td style="text-align:center; !important" width="10px">');
+        print('    <input name="versionId" value="'+list[i].WSO2_QAP_PRODUCT_VERSION_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print('</td>');
+        // print(encodeURIComponent(stringify(list[i])));
+        print('<td>');
+        print('    <a href="product_version_dashboard.jag?data='+encodeURIComponent(stringify(list[i].WSO2_QAP_PRODUCT_VERSION_ID))+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(json_data.WSO2_QAP_PRODUCT_NAME+"&emsp;&emsp;V"+list[i].WSO2_QAP_PRODUCT_VERSION );
+        print('</a>');
+        print('</td>');
+        print('</tr>');
+
+        }
+}
+
+
+ %>

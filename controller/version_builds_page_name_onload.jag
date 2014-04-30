@@ -1,0 +1,25 @@
+<%
+   include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+   var req_data = request.getParameter("data");
+   json_data = parse(decodeURIComponent(req_data));
+   WSO2_QAP_PRODUCT_VERSION_ID=json_data;
+
+   var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_DataService/get/details_by_version_id_version_join_product/"+WSO2_QAP_PRODUCT_VERSION_ID;
+
+   var optionalHeaders1 = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data1 = get(url,"",optionalHeaders1);
+   var obj1 = parse(data1.data);
+   var list1 = obj1.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION;
+      
+
+   if(WSO2_QAP_PRODUCT_VERSION_ID===null){
+      print("Sorry this page isn't available");
+   }else{
+      print(list1.WSO2_QAP_PRODUCT_NAME+" "+list1.WSO2_QAP_PRODUCT_VERSION);
+      
+   }
+%>   

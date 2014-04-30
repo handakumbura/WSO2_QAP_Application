@@ -1,0 +1,25 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var WSO2_QAP_PRODUCT_ID = params.productId;
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+   
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_DataService/get/product_by_id/"+WSO2_QAP_PRODUCT_ID;
+
+   var data = get(url,"",optionalHeaders);
+   var obj = data.data;
+   var jsond = parse(obj);
+
+   WSO2_QAP_PRODUCT_NAME = jsond.WSO2_QAP_PRODUCTCollection.WSO2_QAP_PRODUCT.WSO2_QAP_PRODUCT_NAME;
+
+    var passjsondata='{"WSO2_QAP_PRODUCT_NAME" : "'+WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_ID" : "'+WSO2_QAP_PRODUCT_ID+'"}';
+
+
+ 	
+response.sendRedirect("../view/add_product.jag?data="+encodeURIComponent(stringify(passjsondata)));
+
+%>

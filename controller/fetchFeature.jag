@@ -1,0 +1,243 @@
+<%
+include("base64_encode.jag");
+var DB_URL = session.get("service_secure_root");
+// var DB_URL = "https://localhost:9443/services/";
+var REDMINE_BASE_URL = 'https://redmine.wso2.com/';
+
+
+var param = "";
+
+var username = request.getParameter("username");
+var password = request.getParameter("password");
+
+var optionalHeaders = {
+        "Accept":"application/json",
+    	"Authorization": "Basic "+base64_encode(username+":"+password) };
+
+var optionalHeadersDb = {
+        "Accept":"application/json",
+    	"Authorization": "Basic "+base64_encode('admin:admin') };
+
+var optionalHeadersPost = {
+        "Accept":"application/json",
+            "Content-Type" : "application/json",
+                "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var offset = 0;
+var limit = 100;
+var product_versions = new Array();
+var product_versions_fetched = new Array();
+
+var url = REDMINE_BASE_URL + 'issues.json?status_id=*&offset='+offset+'&limit='+limit;
+var urlproducts = DB_URL+"WSO2_QAP_PRODUCT_DataService/view/products";
+var urlversions;
+
+var dataproducts = get(urlproducts,"",optionalHeadersDb);
+//print(dataproducts.data.WSO2_QAP_PRODUCTCollection);
+
+var objproducts = parse(dataproducts.data);
+if(objproducts.WSO2_QAP_PRODUCTCollection != null){
+
+	
+
+
+var listproducts = objproducts.WSO2_QAP_PRODUCTCollection.WSO2_QAP_PRODUCT;
+
+for(var a=0; a<listproducts.lenght; a++){
+	product_versions_fetched[listproducts[a].WSO2_QAP_PRODUCT_ID] = false;
+}
+
+
+var data = get(url,"",optionalHeaders);
+var obj = JSON.parse(data.data);
+var list = obj.issues;
+
+
+
+var objtemp;
+
+while(list[0] != null){
+
+	for(var i=0; i<list.length; i++){
+		// print(offset+i);
+		// print('<br/>');
+		// print('project name = ');
+		// if(list[i].project != null){
+		// 	print(list[i].project.name);
+		// }
+		// else{
+		// 	print(list[i].project);
+		// }
+		// print('<br/>');
+		// print('fixed version = ');
+		// if(list[i].fixed_version != null){
+		// 	print(list[i].fixed_version.name);
+		// }
+		// else{
+		// 	print(list[i].fixed_version);
+		// }
+		
+		if(list[i].project != null && list[i].fixed_version != null){
+			for (var j =  0; j<listproducts.length;j++) {
+				if(listproducts[j].WSO2_QAP_PRODUCT_NAME == list[i].project.name){
+					
+					if(!(product_versions_fetched[listproducts[j].WSO2_QAP_PRODUCT_ID])){
+						urlversions = DB_URL+"WSO2_QAP_PRODUCT_VERSION_DataService/get/version_by_id/" + listproducts[j].WSO2_QAP_PRODUCT_ID;
+						var dataversions = get(urlversions,"",optionalHeadersDb);
+						var objversions = parse(dataversions.data);
+						objtemp = objversions.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION;
+						product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID] = objtemp;
+						//print('<br/>');
+						//print("fetched");
+						//print('<br/>');
+						product_versions_fetched[listproducts[j].WSO2_QAP_PRODUCT_ID] = true;
+					}
+					
+					if(product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID] == null){
+
+					}else if(product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID] instanceof Array ){
+							
+						for (var k = 0; k < product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID].length; k++) {
+							// print(String(list[i].fixed_version.name));
+							if(((list[i].fixed_version.name).indexOf(product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID][k].WSO2_QAP_PRODUCT_VERSION))!==-1){
+								// print('<br/>');
+								// print('<br/>');
+								// print('<br/>');
+								// print('project and version contains in db');
+								// print('<br/>');
+
+								// print('project name = ');
+								// print(listproducts[j].WSO2_QAP_PRODUCT_NAME);
+								// print('<br/>');
+								// print('fixed version = ');
+								// print(product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID][k].WSO2_QAP_PRODUCT_VERSION);
+								// print('<br/>');
+								// print('subject = ' + list[i].subject);
+								// print('<br/>');
+								// print('description = ' + list[i].description);
+								// print('<br/>');
+								// print('id = ' + list[i].id);
+
+								var redmine = REDMINE_BASE_URL+ "issues/" + list[i].id;
+								var description;
+								if(list[i].description == null){
+									description = "";
+								}else{
+									description = (list[i].description).trim();
+								}	 
+								description = description.replace(/'/g, '\\\'').replace(/"/g, '\\"');
+
+								// print('<br/>');
+								// print('description = ' + description);
+								// print('<br/>');
+
+								var subject = (list[i].subject).trim();
+								var fatureId;
+								var productversionId = product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID][k].WSO2_QAP_PRODUCT_VERSION_ID;
+
+								//testing whether the feature is created
+								var urlredmine = DB_URL+"WSO2_QAP_FEATURE_DataService/get/feature_with_redmine/" + redmine;
+
+								var dataredmine = get(urlredmine,"",optionalHeadersDb);
+								var objredmine = parse(dataredmine.data);
+								var listredmine = objredmine.WSO2_QAP_FEATURECollection.WSO2_QAP_FEATURE;
+
+
+								if(listredmine == null){
+									var urladdfeature = DB_URL+"WSO2_QAP_FEATURE_DataService/add/feature";
+									var paramfeature = '{"_postadd_feature":{"WSO2_QAP_DESCRIPTION" : "'+description+'","WSO2_QAP_REDMINE_URL" : "'+redmine+'","WSO2_QAP_SUBJECT" : "'+subject+'"}}';
+									// print('<br/>');
+									// print(paramfeature);
+									// print('<br/>');
+									// print(urladdfeature);
+									// print('<br/>');
+									// post(urladdfeature, paramfeature, optionalHeadersPost, "json", function (data, xhr) {
+
+
+									var xhr = new XMLHttpRequest();
+							        xhr.open("POST", urladdfeature);
+							        xhr.setRequestHeader("Content-Type" , "application/json");
+							        xhr.send(paramfeature);
+
+							        // print("<br>ReadyState : "+xhr.readyState);
+							        // print("<br>ResponseStatus : "+xhr.status);
+							        // print("<br>ResponseText : "+xhr.responseText);
+
+									var objredminenew = parse(xhr.responseText);
+
+									if(objredminenew.GeneratedKeys != null){
+										var listredminenew = objredminenew.GeneratedKeys.Entry;
+										fatureId = listredminenew.ID;
+									}else{
+										fatureId = null;
+									}
+									
+									
+									// print('<br/>');
+    					
+									// print('<br/>');
+    					// 			print("inserted new id " + fatureId);
+    					// 			print('<br/>');
+    								
+								}else{
+									// print('<br/>');
+									// print("already exist id " + listredmine.WSO2_QAP_FEATURE_ID);
+									// fatureId = listredmine.WSO2_QAP_FEATURE_ID;
+									// print('<br/>');
+								}
+
+								var urladdfeaturetoversion = DB_URL+"WSO2_QAP_PRODUCT_VERSION_FEATURE_MAPPING_DataService/add/productfeature";
+								var paramaddfeaturetoversion = '{"_postadd_productfeature":{"WSO2_QAP_PRODUCT_VERSION_ID" : "'+productversionId+'","WSO2_QAP_FEATURE_ID" : "'+fatureId+'"}}';
+							   	post(urladdfeaturetoversion, paramaddfeaturetoversion, optionalHeadersPost, "json", function (data, xhr) {
+							       
+							       log("Response received");
+							   	} );
+							   	// print("added");
+
+								break;
+							}
+						}
+					
+					}else{
+						if(((list[i].fixed_version.name).indexOf(product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID].WSO2_QAP_PRODUCT_VERSION))!==-1){
+								// print('<br/>');
+								// print('<br/>');
+								// print('<br/>');
+								// print('project and version contains in db');
+								// print('<br/>');
+
+								// print('project name = ');
+								// print(listproducts[j].WSO2_QAP_PRODUCT_NAME);
+								// print('<br/>');
+								// print('fixed version = ');
+								// print(product_versions[listproducts[j].WSO2_QAP_PRODUCT_ID].WSO2_QAP_PRODUCT_VERSION);
+								// print('<br/>');
+								// print('subject = ' + list[i].subject);
+								// print('<br/>');
+								// print('description = ' + list[i].description);
+								// print('<br/>');
+								// print('id = ' + list[i].id);
+								break;
+							}
+					}
+					break;					
+				}
+				
+			}
+		}
+		// print('<hr/>');
+			
+	}
+	offset = offset+limit;
+	
+	url = REDMINE_BASE_URL + 'issues.json?status_id=*&offset='+offset+'&limit='+limit;
+	data = get(url,"",optionalHeaders);
+	obj = JSON.parse(data.data);
+	list = (JSON.parse((get(url,"",optionalHeaders)).data)).issues;
+ }
+}
+
+ response.sendRedirect("../view/products_home.jag");
+
+
+%>

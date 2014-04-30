@@ -1,0 +1,46 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var feature_id=request.getParameter("data");
+
+
+var list = params.WSO2_QAP_SAMPLE_ID;
+var param = "";
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Content-Type":"application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+if(!(list instanceof Array)){
+
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_FEATURE_MAPPING_DataService/add/featureswithsamples"
+
+    var para='{"_postadd_featureswithsamples":{"WSO2_QAP_FEATURE_ID" : "'+feature_id+'","WSO2_QAP_SAMPLE_ID" : "'+list+'"}}';
+print(para);
+    post(url, para, optionalHeaders, "json", function (data, xhr) {
+        log("Response received");
+    } );
+
+}
+else{
+
+    for (var i=0;i<list.length;i++){
+        var url = SERVICE_SECURE_ROOT+"WSO2_QAP_SAMPLE_FEATURE_MAPPING_DataService/add/featureswithsamples";
+
+        var para='{"_postadd_featureswithsamples":{"WSO2_QAP_FEATURE_ID" : "'+feature_id+'","WSO2_QAP_SAMPLE_ID" : "'+list[i]+'"}}';
+
+        post(url, para, optionalHeaders, "json", function (data, xhr) {
+            log("Response received");
+        } );
+
+
+    }
+
+}
+
+response.sendRedirect("../view/feature_dashboard.jag?data="+encodeURIComponent(stringify(feature_id)));
+
+
+%>

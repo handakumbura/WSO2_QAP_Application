@@ -1,0 +1,27 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var versionId = request.getParameter("versionId");
+var WSO2_QAP_PRODUCT_NAME = request.getParameter("WSO2_QAP_PRODUCT_NAME");
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+   
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_DataService/get/details_by_version_id/"+versionId;
+
+   var data = get(url,"",optionalHeaders);
+
+   var obj = data.data;
+   var jsond = parse(obj);
+
+   var WSO2_QAP_PRODUCT_VERSION_ID = jsond.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION.WSO2_QAP_PRODUCT_VERSION_ID;
+   var WSO2_QAP_PRODUCT_ID = jsond.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION.WSO2_QAP_PRODUCT_ID;
+   var WSO2_QAP_PRODUCT_VERSION = jsond.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION.WSO2_QAP_PRODUCT_VERSION;
+
+
+    var passjsondata='{"WSO2_QAP_PRODUCT_NAME" : "'+WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION_ID" : "'+WSO2_QAP_PRODUCT_VERSION_ID+'","WSO2_QAP_PRODUCT_ID" : "'+WSO2_QAP_PRODUCT_ID+'","WSO2_QAP_PRODUCT_VERSION" : "'+WSO2_QAP_PRODUCT_VERSION+'"}';
+ 	
+	response.sendRedirect("../view/add_product_version.jag?data="+encodeURIComponent(stringify(passjsondata)));
+
+%>

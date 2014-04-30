@@ -1,0 +1,107 @@
+<td id="menu-panel" valign="top">
+	<table id="menu-table" border="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td id="region1">
+					<div id="menu">
+						<ul class="main">
+							<li id="region1_products_menu" class="menu-header"
+								onclick="mainMenuCollapse(this.childNodes[0])"
+								style="cursor: pointer;"><img src="../resources/images/up-arrow.gif"
+								class="mMenuHeaders" id="region1_products_menu">Products</li>
+							<li class="normal">
+								<ul class="sub">
+									<li><a href="../view/products_home.jag" class="menu-default"
+										style="background-image: url(../resources/images/list.gif);">List</a>
+									</li>
+									<li><a href="../view/add_product.jag" class="menu-default"
+										style="background-image: url(../resources/images/add.gif);">Add Product</a>
+									</li>
+
+								</ul>
+							</li>
+
+
+
+							<li id="region1_testscenario_menu" class="menu-header"
+								onclick="mainMenuCollapse(this.childNodes[0])"
+								style="cursor: pointer;"><img src="../resources/images/up-arrow.gif"
+								class="mMenuHeaders" id="region1_testscenario_menu">Test Scenario</li>
+
+								<li class="normal">
+								<ul class="sub">
+									<li><a href="testscenario_home.jag" class="menu-default"
+										style="background-image: url(../resources/images/list.gif);">List</a>
+									</li>
+									<li><a href="add_testscenario.jag" class="menu-default"
+										style="background-image: url(../resources/images/add.gif);">Add Test Scenario</a>
+									</li>
+
+								</ul>
+							</li>
+
+							<li id="region1_testcase_menu" class="menu-header"
+								onclick="mainMenuCollapse(this.childNodes[0])"
+								style="cursor: pointer;"><img src="../resources/images/up-arrow.gif"
+								class="mMenuHeaders" id="region1_testcase_menu">Test Case</li>
+
+								<li class="normal">
+								<ul class="sub">
+									<li><a href="testcase_home.jag" class="menu-default"
+										style="background-image: url(../resources/images/list.gif);">List</a>
+									</li>
+									<li><a href="add_testcase.jag" class="menu-default"
+										style="background-image: url(../resources/images/add.gif);">Add Test Case</a>
+									</li>
+
+								</ul>
+							</li>
+
+
+
+							<li id="region1_features_menu" class="menu-header"
+								onclick="mainMenuCollapse(this.childNodes[0])"
+								style="cursor: pointer;"><img src="../resources/images/up-arrow.gif"
+								class="mMenuHeaders" id="region1_features_menu">Features</li>
+
+								<li class="normal">
+								<ul class="sub">
+
+									<li><a href="fetch_feature.jag" class="menu-default"
+										style="background-image: url(../resources/images/add.gif);">Fetch Features</a>
+									</li>
+
+								</ul>
+							</li>
+
+							<li id="region1_features_menu" class="menu-header"
+								onclick="mainMenuCollapse(this.childNodes[0])"
+								style="cursor: pointer;"><img src="../resources/images/up-arrow.gif"
+								class="mMenuHeaders" id="region1_sample_menu">Samples</li>
+
+								<li class="normal">
+								<ul class="sub">
+
+									<li><a href="sample_home.jag" class="menu-default"
+										style="background-image: url(../resources/images/add.gif);">List</a>
+									</li>
+
+                                    <li><a href="add_sample.jag" class="menu-default"
+										style="background-image: url(../resources/images/add.gif);">Add Sample</a>
+									</li>
+
+								</ul>
+							</li>
+
+						</ul>
+					</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td><img src="../resources/images/1px.gif" width="225px" height="1px">
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</td>

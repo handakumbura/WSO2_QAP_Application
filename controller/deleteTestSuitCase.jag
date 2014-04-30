@@ -1,0 +1,43 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var WSO2_QAP_TEST_SCENARIO_ID = params.WSO2_QAP_TEST_SCENARIO_ID;
+//print(WSO2_QAP_TEST_SCENARIO_ID);
+
+var list = params.testcaseId;
+//print(list);
+var param = "";
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+if(!(list instanceof Array)){
+
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING_DataService/delete/testcase_from_scenario/"+WSO2_QAP_TEST_SCENARIO_ID+"/"+list;
+	//print(url);
+        del(url, param, optionalHeaders, "json", function (data, xhr) {
+            log("Response received");
+        } );
+
+}
+else{
+
+    for (var i=0;i<list.length;i++){
+        var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING_DataService/delete/testcase_from_scenario/"+WSO2_QAP_TEST_SCENARIO_ID+"/"+list[i];
+        //print(url);
+        del(url, param, optionalHeaders, "json", function (data, xhr) {
+            log("Response received");
+        } );
+
+
+    }
+
+}
+//print(WSO2_QAP_FEATURE_ID);
+//response.sendRedirect("../view/testscenario_home.jag");
+response.sendRedirect("../view/test_scenario_dashboard.jag?data="+encodeURIComponent(stringify(WSO2_QAP_TEST_SCENARIO_ID)));
+
+
+%>

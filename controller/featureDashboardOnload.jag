@@ -1,0 +1,32 @@
+<%
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var WSO2_QAP_FEATURE_ID = parse(request.getParameter("data"));
+    var urlFeatureDetails  = SERVICE_SECURE_ROOT+"WSO2_QAP_FEATURE_DataService/view/feature_by_id/"+WSO2_QAP_FEATURE_ID;
+
+   	var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+	var dataFeatureDetails = get(urlFeatureDetails,"",optionalHeaders);
+	var objFeatureDetails = parse(dataFeatureDetails.data);
+	var listFeatureDetails = objFeatureDetails.WSO2_QAP_FEATURECollection.WSO2_QAP_FEATURE;
+
+
+print('<input type="hidden" name="WSO2_QAP_FEATURE_ID" value="'+WSO2_QAP_FEATURE_ID+'">');
+print("<tr class=\"tableOddRow\"><td>Subject</td>");
+print("<td>"+listFeatureDetails.WSO2_QAP_SUBJECT+"</td></tr>");
+print("<tr class=\"tableEvenRow\"><td>Description</td>");
+print("<td>"+listFeatureDetails.WSO2_QAP_DESCRIPTION+"</td></tr>");
+print("<tr class=\"tableOddRow\"><td>Redmine URL</td>");
+var redminelink;
+if((listFeatureDetails.WSO2_QAP_REDMINE_URL).indexOf("http://")!==-1 || (listFeatureDetails.WSO2_QAP_REDMINE_URL).indexOf("https://")!==-1){
+    redminelink = listFeatureDetails.WSO2_QAP_REDMINE_URL;
+}else{
+    redminelink = "http://"+listFeatureDetails.WSO2_QAP_REDMINE_URL;
+}
+print("<td><a href="+listFeatureDetails.WSO2_QAP_REDMINE_URL+" target=\"_blank\">"+redminelink+"</a></td></tr>");
+
+
+ %>

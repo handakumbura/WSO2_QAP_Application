@@ -1,0 +1,31 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var testcaseid = request.getParameter("WSO2_QAP_TEST_CASE");
+var teststatus = request.getParameter("WSO2_QAP_TEST_STATUS");
+var automationresult = request.getParameter("WSO2_QAP_AUTOMATION_TEST_RESULT");
+var testedby = request.getParameter("WSO2_QAP_TESTED_BY");
+var param = '{"_postadd_testresults":{"WSO2_QAP_TEST_CASE_ID" : "'+testcaseid+'","WSO2_QAP_TEST_STATUS" : "'+teststatus+'","WSO2_QAP_AUTOMATION_TEST_RESULT" : "'+automationresult+'","WSO2_QAP_TESTED_BY" : "'+testedby+'"}}';
+print(param);
+
+var optionalHeaders = {
+        "Accept":"application/json",
+        	"Content-Type" : "application/json",
+            	"Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/add/testresults";
+
+if(testcaseid===null){
+
+	response.sendRedirect("../view/add_test_result.jag");
+}
+else{
+	post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+	
+	response.sendRedirect("../view/products_home.jag");
+}
+
+%>

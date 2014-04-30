@@ -1,0 +1,108 @@
+<%
+
+include("../base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+var optionalHeaders = {
+    "Accept":"application/json",
+    "Content-Type" : "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var getHeaders = {
+    "Accept":"application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+
+
+
+
+function addArtifact( artifact_name, artifact_location, artifact_description){
+    artifact_location= artifact_location.substr(0,500);
+    artifact_description= artifact_description.substr(0,500);
+
+    var param = '{"_postadd_artifacts":{"WSO2_QAP_ARTIFACT_NAME" : "'+artifact_name+'","WSO2_QAP_ARTIFACT_DESCRIPTION" : "'+artifact_description+'","WSO2_QAP_LOCATION" : "'+artifact_location+'"}}';
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_ARTIFACT_DataService/add/artifacts";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type" , "application/json");
+    xhr.send(param);
+    var result = parse(xhr.responseText);
+
+    return result.GeneratedKeys.Entry.ID;
+
+
+
+}
+
+function addAutoTestClass(WSO2_QAP_AUTO_TEST_CLASS_LOCATION, WSO2_QAP_AUTO_TEST_CLASS_NAME){
+
+    var param = '{"_postadd_autotest":{"WSO2_QAP_AUTO_TEST_CLASS_NAME" : "'+WSO2_QAP_AUTO_TEST_CLASS_NAME+'","WSO2_QAP_AUTO_TEST_CLASS_LOCATION" : "'+WSO2_QAP_AUTO_TEST_CLASS_LOCATION+'"}}';
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/add/autotest";
+
+    post(url, param, optionalHeaders, "json", function (data, xhr) {
+        log("Response received");
+    } );
+
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/view/last_id";
+    var data =get(url,"",getHeaders);
+    var result = parse(data.data);
+    return result.WSO2_QAP_AUTO_TEST_CLASSCollection.WSO2_QAP_AUTO_TEST_CLASS.LAST_INSERTED_ID;
+
+}
+
+function addTestCase(TestCaseName,status, description, artifact, autotestcase){
+
+    TestCaseName= TestCaseName.substr(0,45);
+    description= description.substr(0,500);
+    artifact= artifact.substr(0,10);
+    autotestcase= autotestcase.substr(0,10);
+    status= status.substr(0,10);
+    var param='{"_postadd_addtestcase":{"WSO2_QAP_TEST_CASE_NAME" : "'+TestCaseName+'","WSO2_QAP_AUTOMATION_STATUS" : "'+status+'","WSO2_QAP_DESCRIPTION" : "'+description+'","WSO2_QAP_ARTIFACT_ID" : "'+artifact+'","WSO2_QAP_AUTO_TEST_CLASS_ID" : "'+autotestcase+'"}}';
+
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/add/testcase";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type" , "application/json");
+    xhr.send(param);
+    var result = parse(xhr.responseText);
+
+    return result.GeneratedKeys.Entry.ID;
+
+
+}
+
+function addTestScenario(scenario_name, scenario_description){
+
+    scenario_name= scenario_name.substr(0,100);
+    scenario_description= scenario_description.substr(0,500);
+
+
+    var param = '{"_postadd_test_scenario":{"WSO2_QAP_DESCRIPTION" : "'+scenario_description+'","WSO2_QAP_TEST_SCENARIO_NAME" : "'+scenario_name+'"}}';
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_DataService/add/testscenario";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type" , "application/json");
+    xhr.send(param);
+    var result = parse(xhr.responseText);
+
+    return result.GeneratedKeys.Entry.ID;
+
+}
+
+
+function testscenarioMappingTestcase(scenarioID, testcaseID){
+
+    var param = '{"_postadd_testcases_for_testscenario":{"WSO2_QAP_TEST_SCENARIO_ID" : "'+scenarioID+'","WSO2_QAP_TEST_CASE_ID" : "'+testcaseID+'"}}';
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_TEST_CASE_MAPPING_DataService/add/testcases_for_testscenario";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type" , "application/json");
+    xhr.send(param);
+
+}
+
+%>

@@ -1,0 +1,38 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var class_name= request.getParameter("WSO2_QAP_AUTOTESTCLASS_NAME");
+var class_location=request.getParameter("WSO2_QAP_AUTOTESTCLASS_LOCATION");
+// var param = '{"_postadd_products":{"WSO2_QAP_PRODUCT_NAME" : "'+product_name+'"}}';
+//var param = "WSO2_QAP_TESTSCENARIO_DESCRIPTION="+scenario_description;
+var param = '{"_postadd_auto_testclass":{"WSO2_QAP_AUTO_TEST_CLASS_LOCATION" : "'+class_location+'","WSO2_QAP_AUTO_TEST_CLASS_NAME" : "'+class_name+'"}}';
+print(param);
+
+var optionalHeaders = {
+        "Accept":"application/json",
+	"Content-Type" : "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/add/autotest";
+
+if(class_name===null || class_location===null){
+
+	response.sendRedirect("../view/add_autotestclass.jag");
+}
+else{
+	post(url, param, optionalHeaders, "json", function (data,xhr) {
+       log("Response received");
+   } );
+	
+	response.sendRedirect("../view/autotestclass_home.jag");
+}
+
+
+
+%>
+
+
+ /*curl --data '{"_postadd_products":{"WSO2_QAP_PRODUCT_NAME" : "jjj123"}}' http://localhost:9764/services/WSO2_QAP_PRODUCT_DataService/add/products --header Content-Type:"application/json"
+//curl -X POST --data "WSO2_QAP_PRODUCT_NAME=Sherlok" -H "Accept: application/json" http://localhost:9764/services/WSO2_QAP_PRODUCT_DataService/add/products */
+

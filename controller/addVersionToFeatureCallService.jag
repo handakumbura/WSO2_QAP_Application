@@ -1,0 +1,43 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var WSO2_QAP_PRODUCT_VERSION_ID = params.WSO2_QAP_PRODUCT_VERSION_ID;
+//print(WSO2_QAP_PRODUCT_VERSION_ID);
+
+ var list = params.featureId;
+ 
+//print(list);
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+if(!(list instanceof Array)){
+
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_FEATURE_MAPPING_DataService/add/productfeature";
+//print(url);
+var param = '{"_postadd_productfeature":{"WSO2_QAP_PRODUCT_VERSION_ID" : "'+WSO2_QAP_PRODUCT_VERSION_ID+'","WSO2_QAP_FEATURE_ID" : "'+list+'"}}';
+      //print(param);  
+        post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+
+}
+else{
+
+    for (var i=0;i<list.length;i++){
+        var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_FEATURE_MAPPING_DataService/add/productfeature";
+var param = '{"_postadd_productfeature":{"WSO2_QAP_PRODUCT_VERSION_ID" : "'+WSO2_QAP_PRODUCT_VERSION_ID+'","WSO2_QAP_FEATURE_ID" : "'+list[i]+'"}}';
+        post(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+
+
+    }
+
+}
+// //print(WSO2_QAP_FEATURE_ID);
+ response.sendRedirect("../view/version_feature_dashboard.jag?data="+encodeURIComponent(stringify(WSO2_QAP_PRODUCT_VERSION_ID)));
+
+%>

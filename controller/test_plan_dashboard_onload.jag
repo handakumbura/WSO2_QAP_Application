@@ -1,0 +1,71 @@
+<%
+   include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+   // print('<input type="hidden" name="WSO2_QAP_PRODUCT_VERSION_ID" value="'+WSO2_QAP_PRODUCT_VERSION_ID+'">');
+
+   print('<tr bgcolor="#EEEFFB">');
+   print('<td>');
+   print('</td>');
+   print('<td>');
+   print('<strong> Test Suit Name <strong/>');
+   print('</td>');
+   print('<input type="hidden" name="WSO2_QAP_TEST_PLAN_ID" value="'+jd2.WSO2_QAP_TEST_PLAN_ID+'">');
+
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SUIT_DataService/get/testsuit_join_plan_mapping_suit_by_plan_id/"+jd2.WSO2_QAP_TEST_PLAN_ID;
+
+   var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data = get(url,"",optionalHeaders);
+   var obj = parse(data.data);
+   var list = obj.WSO2_QAP_TESTSUIT_join_PLAN_MAPPING_SUITCollection.WSO2_QAP_TESTSUIT_join_PLAN_MAPPING_SUIT;
+
+
+   if(list.length==null && list.WSO2_QAP_TEST_SUIT_NAME!=null){
+  
+        print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="testSuitId" value="'+list.WSO2_QAP_TEST_SUIT_ID+'" onclick="resetVarsTestPlan()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        var link = "test_suit_dashboard.jag?data="+encodeURIComponent(stringify(list.WSO2_QAP_TEST_SUIT_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list.WSO2_QAP_TEST_SUIT_NAME);
+
+        print('</a>');
+        print('</td>');
+        print('</tr>');
+
+    }
+    else{
+        for (var i=0;i<list.length;i++)
+        {
+
+          if(i%2==1){
+            print('<tr bgcolor="#EEEFFB">');
+          }
+          else{
+            print('<tr>');
+          }
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="testSuitId" value="'+list.WSO2_QAP_TEST_SUIT_ID+'" onclick="resetVarsTestPlan()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        var link = "test_suit_dashboard.jag?data="+encodeURIComponent(stringify(list.WSO2_QAP_TEST_SUIT_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list.WSO2_QAP_TEST_SUIT_NAME);
+
+        print('</a>');
+        print('</td>');
+        print('</tr>');
+
+        }
+   }
+
+   // print(list2);
+%>   

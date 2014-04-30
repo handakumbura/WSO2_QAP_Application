@@ -1,0 +1,85 @@
+<%
+   include("base64_encode.jag");
+   var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+   
+   var url = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_VERSION_DataService/get/details_by_version_id_version_join_feature/"+WSO2_QAP_PRODUCT_VERSION_ID;
+
+
+   var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+   var data3 = get(url,"",optionalHeaders);
+   var obj3 = parse(data3.data);
+   var list3 = obj3.WSO2_QAP_PRODUCT_VERSIONCollection.WSO2_QAP_PRODUCT_VERSION;
+
+
+   if(list3 == null){
+      print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+       
+        print(' </td>');
+
+        print(' <td>');
+       
+        print('</td>');
+        print(' <td>');
+      
+        print('</td>');
+        print('</tr>');
+   }
+   else if(!(list3 instanceof Array)){
+
+        print('<tr>');
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="featureID" value="'+list3.WSO2_QAP_FEATURE_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print(' </td>');
+
+        print(' <td>');
+        var link = "feature_dashboard.jag?data="+encodeURIComponent(stringify(list3.WSO2_QAP_FEATURE_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list3.WSO2_QAP_SUBJECT );
+        print('</a>');
+        print('</td>');
+        print(' <td>');
+        var link2 = list3.WSO2_QAP_REDMINE_URL;
+        print(' <td>');
+        print('<a href="'+link2+'"target="_blank">');
+        print(list3.WSO2_QAP_REDMINE_URL);
+        print('</a>');
+        print('</td>');
+        print('</tr>');
+
+    }
+    else{
+        for (var i=0;i<list3.length;i++)
+        {
+          if(i%2==1){
+            print('<tr bgcolor="#EEEFFB">');
+          }
+          else{
+            print('<tr>');
+          }
+        print(' <td style="text-align:center; !important" width="10px">');
+        print('    <input name="featureID" value="'+list3[i].WSO2_QAP_FEATURE_ID+'" onclick="resetVars()" class="chkBox" type="checkbox">');
+        print(' </td>');
+        print(' <td>');
+        var link = "feature_dashboard.jag?data="+encodeURIComponent(stringify(list3[i].WSO2_QAP_FEATURE_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list3[i].WSO2_QAP_SUBJECT );
+        print('</a>');
+        print('</td>');
+        var link2 = list3[i].WSO2_QAP_REDMINE_URL;
+        print(' <td>');
+        print('<a href="'+link2+'"target="_blank">');
+        print(list3[i].WSO2_QAP_REDMINE_URL);
+        print('</a>');
+        print('</td>');
+        print('</tr>');
+
+        }
+   }
+
+%> 

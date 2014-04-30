@@ -1,0 +1,86 @@
+<%
+ 
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+    var req_data = request.getParameter("data");
+    var WSO2_QAP_BUILD_ID = parse(decodeURIComponent(req_data));
+    
+
+    var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_PRODUCT_BUILD_DataService/get/build_by_id/"+WSO2_QAP_BUILD_ID;
+
+   	var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") 
+        };
+
+
+	var data = get(url,"",optionalHeaders);
+
+	var obj = parse(data.data);
+	var list = obj.WSO2_QAP_PRODUCT_BUILDCollection.WSO2_QAP_PRODUCT_BUILD;
+    var TestPlanID=list.WSO2_QAP_TEST_PLAN_ID;
+
+    
+    print('<tbody>');
+        print('<thead>');
+            print('<tr bgcolor="#EEEFFB">');
+                print('<th style="text-align:center; !important" width="10px">');
+                print('</th>');
+
+                print('<th>');
+                print('<nobr>Build Name</nobr>');
+
+                print('</th>');
+                print('<th>'+list.WSO2_QAP_BUILD_NAME+'</th>');
+            print('</tr>');
+        print('</thead>');
+
+            print('<tr bgcolor="white">');
+                print('<td style="text-align:center; !important" width="10px">');
+                print('</td>');
+
+                print('<td>');
+                print('Product');
+                print('</td>');
+
+                print('<td> &nbsp;');
+                var link = "product_versions.jag?data="+encodeURIComponent(stringify(list));
+                print('<a href="'+link+'">');
+                print(list.WSO2_QAP_PRODUCT_NAME);
+                print('</a>');
+                print('</td>');
+            print('</tr>');
+
+
+            print('<tr bgcolor="#EEEFFB">');
+                print('<td style="text-align:center; !important" width="10px">');
+                print('</td>');
+
+                print('<td>');
+                print('Product Version');
+                print('</td>');
+
+                print('<td> &nbsp;');
+                var link2="product_version_dashboard.jag?data="+encodeURIComponent(stringify(list.WSO2_QAP_PRODUCT_VERSION_ID));
+                print('<a href="'+link2+'">');
+                print(list.WSO2_QAP_PRODUCT_VERSION);
+                print('</a>');
+                print('</td>');
+                print('</tr>');
+
+            print('<tr bgcolor="white">');
+                print('<td style="text-align:center; !important" width="10px">');
+                print('</td>');
+
+                print('<td>');
+                print('Build Date');
+                print('</td>');
+
+                print('<td> &nbsp;');
+                print(list.WSO2_QAP_RELEASE_DATE);
+                print('</td>');
+            print('</tr>');
+
+    print('</tbody>');                                 
+ %>

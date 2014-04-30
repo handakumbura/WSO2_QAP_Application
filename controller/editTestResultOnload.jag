@@ -1,0 +1,69 @@
+<%
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var WSO2_QAP_TEST_RESULT_ID = parse(request.getParameter("data"));
+    var WSO2_QAP_BUILD_ID = parse(request.getParameter("build_id"));
+    var urlResultDetails  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/view/testresult_by_id/"+WSO2_QAP_TEST_RESULT_ID;
+
+   	var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+	var dataResultDetails = get(urlResultDetails,"",optionalHeaders);
+	var objResultDetails = parse(dataResultDetails.data);
+	var listResultDetails = objResultDetails.WSO2_QAP_TEST_RESULTCollection.WSO2_QAP_TEST_RESULT;
+
+    var urlCaseDetails  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_CASE_DataService/view/testcase_by_id/"+listResultDetails.WSO2_QAP_TEST_CASE_ID;
+    var dataCaseDetails = get(urlCaseDetails,"",optionalHeaders);
+    var objCaseDetails = parse(dataCaseDetails.data);
+    var listCaseDetails = objCaseDetails.WSO2_QAP_TEST_CASECollection.WSO2_QAP_TEST_CASE;
+
+if(listResultDetails != null){
+
+print('<tr class="tableOddRow">');
+print('<td class="formRow">Test Case Name<span class="required">*</span></td>');
+print('<td><input name="WSO2_QAP_TEST_CASE" id="WSO2_QAP_TEST_CASE" readonly="true" value="'+listCaseDetails.WSO2_QAP_TEST_CASE_NAME +'"></td>')
+print('</tr>');
+
+print('<tr class="tableEvenRow">');
+print('<td class="formRow">Test Status</td>');
+print('<td><select name="WSO2_QAP_TEST_STATUS" id="WSO2_QAP_TEST_STATUS">');
+print('<option value="IN PROGRESS" ');
+if(listResultDetails.WSO2_QAP_TEST_STATUS == "IN PROGRESS") print('selected');
+print('>IN PROGRESS</option>');
+print('<option value="PASSED" ');
+if(listResultDetails.WSO2_QAP_TEST_STATUS == "PASSED") print('selected');
+print('>PASSED</option>');
+print('<option value="FAILED" ');
+if(listResultDetails.WSO2_QAP_TEST_STATUS == "FAILED") print('selected');
+print('>FAILED</option>');
+print('</select></td>');
+print('</tr>');
+
+print('<tr class="tableOddRow">');
+print('<td class="formRow">Automation Test Result</td>');
+print('<td><select name="WSO2_QAP_AUTOMATION_TEST_RESULT" id="WSO2_QAP_AUTOMATION_TEST_RESULT">');
+print('<option value="NO TESTS" ');
+if(listResultDetails.WSO2_QAP_AUTOMATION_TEST_RESULT == "NO TESTS") print('selected');
+print('>NO TESTS</option>');
+print('<option value="PASSED" ');
+if(listResultDetails.WSO2_QAP_AUTOMATION_TEST_RESULT == "PASSED") print('selected');
+print('>PASSED</option>');
+print('<option value="FAILED" ');
+if(listResultDetails.WSO2_QAP_AUTOMATION_TEST_RESULT == "FAILED") print('selected');
+print('>FAILED</option>');
+print('<option value="YET TO RUN" ');
+if(listResultDetails.WSO2_QAP_AUTOMATION_TEST_RESULT == "YET TO RUN") print('selected');
+print('>YET TO RUN</option>');
+print('</select></td>');
+print('</tr>');
+
+print('</tr><tr class="tableEvenRow">');
+print('<td class="formRow">Tested By</td>');
+print('<td class="formRow"><input id="WSO2_QAP_TESTED_BY" name="WSO2_QAP_TESTED_BY" value="'+name+'"></td>');
+print('</tr>');
+print('<input type=hidden name=WSO2_QAP_TEST_RESULT_ID id=WSO2_QAP_TEST_RESULT_ID value='+WSO2_QAP_TEST_RESULT_ID+'>');
+print('<input name=WSO2_QAP_BUILD_ID id=WSO2_QAP_BUILD_ID  value="'+WSO2_QAP_BUILD_ID+'" type="hidden">');
+}
+ %>

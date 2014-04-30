@@ -1,0 +1,30 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+
+var testresultid = request.getParameter("WSO2_QAP_TEST_RESULT_ID");
+var teststatus = request.getParameter("WSO2_QAP_TEST_STATUS");
+var automationresult = request.getParameter("WSO2_QAP_AUTOMATION_TEST_RESULT");
+var testedby = request.getParameter("WSO2_QAP_TESTED_BY");
+var WSO2_QAP_BUILD_ID = parse(request.getParameter("WSO2_QAP_BUILD_ID"));
+var param = '{"_postadd_testresults":{"WSO2_QAP_TEST_RESULT_ID" : "'+testresultid+'","WSO2_QAP_TEST_STATUS" : "'+teststatus+'","WSO2_QAP_AUTOMATION_TEST_RESULT" : "'+automationresult+'","WSO2_QAP_TESTED_BY" : "'+testedby+'"}}';
+
+
+var optionalHeaders = {
+        "Accept":"application/json",
+        	"Content-Type" : "application/json",
+            	"Authorization": "Basic "+base64_encode("admin:admin") };
+
+var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/edit/testresults";
+
+
+
+	put(url, param, optionalHeaders, "json", function (data, xhr) {
+       log("Response received");
+   } );
+
+
+	response.sendRedirect("../view/build_dashboard.jag?data="+encodeURIComponent(WSO2_QAP_BUILD_ID));
+
+
+%>

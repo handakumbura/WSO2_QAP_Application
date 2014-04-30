@@ -1,0 +1,9 @@
+<% 
+include("const.jag");
+var name = session.get("username");
+ if(name===null){
+   response.sendRedirect("view/login.jag");
+}else{
+	 response.sendRedirect("view/products_home.jag");
+}
+%>

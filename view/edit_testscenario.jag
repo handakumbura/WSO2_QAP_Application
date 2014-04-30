@@ -1,0 +1,158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<%
+	var name = session.get("username");
+	if(name===null){
+    	response.sendRedirect("login.jag");
+    }
+    require("template/head.jag");
+%>
+
+
+</head>
+<body>
+	<noscript>
+		<div class="something-wrong">
+			<div class="title">JavaScript is disabled on your browser</div>
+			<div class="content">Please enable JavaScript or upgrade to a
+				JavaScript-capable browser to use WSO2 Products.</div>
+		</div>
+	</noscript>
+	<div id="dcontainer"></div>
+	<script type="text/javascript" src="resources/js/dialog.js"></script>
+	<script type="text/javascript" src="resources/js/jquery-ui.js"></script>
+	<!-- JS imports for collapsible menu -->
+	<script src="resources/js/yahoo-dom-event.js" type="text/javascript"></script>
+	<script src="resources/js/animation-min.js" type="text/javascript"></script>
+	<script src="resources/js/template.js" type="text/javascript"></script>
+	<script src="resources/js/yahoo-min.js" type="text/javascript"></script>
+	<script src="resources/js/selector-min.js" type="text/javascript"></script>
+	<link rel="stylesheet"
+	href="resources/css/jquery-ui.css">
+	
+	<table id="main-table" border="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td id="header" colspan="3">
+				<%
+					require("template/header_div.jag");
+				%>
+				</td>
+			</tr>
+			<tr>
+				<% 
+					require("template/product_vertical_menu.jag");
+				%>
+				<%
+					require("template/product_menu_panel.jag");
+				%>
+
+
+				<td id="middle-content">
+					<table id="content-table" border="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<td id="page-header-links">
+									<table class="page-header-links-table" cellspacing="0">
+										<tbody>
+											<tr>
+												<td class="breadcrumbs">
+													<table class="breadcrumb-table" cellspacing="0">
+														<tbody>
+															<tr>
+																<td>
+																	<div id="breadcrumb-div">
+																		
+																	</div>
+																</td>
+															</tr>
+
+														</tbody>
+													</table>
+												</td>
+
+												<td class="page-header-help"><a href="./docs/userguide.html"
+													target="_blank">Help</a></td>
+
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td id="body"><img src="../admin/images/1px.gif" width="735px"
+									height="1px">
+								
+								<div id="middle">
+										<h2>Edit Test Scenario</h2>
+
+										<div id="workArea">
+											<form name="add_testscenario" action="../controller/addTestScenario.jag" method="post" onsubmit="return validateInput();return false;">
+												<enctype="multipart/form-data" target="_self">
+												<table class="styledLeft" id="archiveTbl">
+													
+													<tbody>
+															<tr class="tableEvenRow">
+																<td class="formRow">Name<font color="red">*</font>
+																</td>
+																<td>
+                                                               <input size="35" name="WSO2_QAP_TESTSCENARIO_NAME" id="WSO2_QAP_TESTSCENARIO_NAME" value="" type="text">
+                                                            	</td>
+                                                            </tr>
+                                                            <tr>
+                                                             	<td class="formRow">Description<font color="red">*</font>
+																</td>
+
+																<td>
+																	<textarea rows="4" cols="50" name="WSO2_QAP_TESTSCENARIO_DESCRIPTION" id="WSO2_QAP_TESTSCENARIO_DESCRIPTION">
+																	</textarea>
+																</td>
+															</tr>
+													    
+														
+														
+
+													</tbody>
+												</table>
+												<table class="styledLeft">
+													<tbody>
+														<tr>
+															<td class="buttonRow" colspan="2"><input name="upload"
+																type="submit" class="button" value=" Save"
+																onclick="submitForm();"> <input type="button"
+																	class="button"
+																	onclick="location.href='../service-mgt/index.jsp';"
+																	value=" Cancel ">
+															
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</form>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+
+			</tr>
+			<tr>
+				<% 
+				require("template/footer.jag")
+				%>
+			</tr>
+		</tbody>
+	</table>
+	<script type="text/javascript">
+         if (Function('/*@cc_on return document.documentMode===10@*/')()){
+          document.documentElement.className+=' ie10';
+         }
+      </script>
+</body>
+</html>
+
+

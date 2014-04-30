@@ -1,0 +1,34 @@
+<div id="header-div">
+   <div class="right-logo">QA Portal</div>
+   <div class="left-logo">
+      <a href="../index.jag" class="header-home"><img src="../resources/images/1px.gif" width="300px" height="32px"></a>
+   </div>
+   <div class="middle-ad">
+   </div>
+   <div class="header-links">
+      <div class="right-links">
+         <ul>
+            <li class="middle">
+               <label id="logged-user">
+               <strong>Signed-in as:</strong>&nbsp;
+                     <%
+                           print(name);
+                     %>
+               </label>
+            </li>
+            <li class="middle">|</li>
+            <li class="right">
+               <a href="../controller/logout_action.jag">Sign-out</a>
+            </li>
+            <li class="middle">|</li>
+            <li class="middle">
+               <a target="_blank" href="http://docs.wso2.org/wiki/display/AS521/WSO2+Application+Server+Documentation">Docs</a>
+            </li>
+            <li class="middle">|</li>
+            <li class="left">
+               <a target="_blank" href="https://localhost:9443/carbon/docs/about.jag">About</a>
+            </li>
+         </ul>
+      </div>
+   </div>
+</div>

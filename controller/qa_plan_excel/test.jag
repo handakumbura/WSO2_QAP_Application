@@ -1,0 +1,25 @@
+<script type="text/javascript" src="../../resources/js/jquery-1.js"></script>
+<script type="text/javascript" src="getData.js"></script>
+
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        var data = getDataFromExcel("http://localhost:9763/services/WSO2_QA_PLANS/get/data");
+
+        data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        document.getElementById("dataInput").value = data;
+        document.getElementById("dataSubmit").submit();
+
+    });
+
+</script>
+
+<html>
+
+    <form id="dataSubmit" action="addFromExcel.jag" method="post">
+        <input name="dataInput" id="dataInput" type="hidden"/>
+    </form>
+
+
+</html>

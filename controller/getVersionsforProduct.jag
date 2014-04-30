@@ -1,0 +1,34 @@
+<%
+include("base64_encode.jag");
+	var DB_URL = session.get("service_secure_root");
+	var productSelected = request.getParameter("product");
+	var requestParam={WSO2_QAP_PRODUCT_NAME: productSelected};
+	var url = DB_URL+"WSO2_QAP_GetVersionforProductName/version";
+    var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+    var dataVersions=get(url, requestParam, optionalHeaders);
+
+    var objVersions=parse(dataVersions.data);
+    
+    var versions = objVersions.WSO2_QAP_PRODUCT_VERSION_Collection.WSO2_QAP_PRODUCT_VERSION_Row;
+    
+    //checking data type, print accordingly.
+    if(versions instanceof Array)
+    {
+    	for(var i=0;i<versions.length;i++)
+    	    {
+    	    	
+    	    	print("<option value="+i+">"+versions[i].WSO2_QAP_PRODUCT_VERSION+"</option>");
+    	    }
+    }
+    else 
+    {
+    	print("<option selected disabled hidden value=''> </option>");
+    	print("<option value=0>"+versions.WSO2_QAP_PRODUCT_VERSION+"</option>");
+    }
+ 
+	
+
+%>

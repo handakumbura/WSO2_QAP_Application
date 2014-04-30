@@ -1,0 +1,38 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var list = params.autotestclassid;
+var param = "";
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+
+ if(typeof list === 'string'){
+ 	var url = SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/delete/autotestclass/"+list;
+
+     del(url, param, optionalHeaders, "json", function (data, xhr) {
+         log("Response received");
+     } );
+
+ 	}
+ 	else{
+ 		print("else");
+		for (var i=0;i<list.length;i++){
+			var url = SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/delete/autotestclass/"+list[i];
+            del(url, param, optionalHeaders, "json", function (data, xhr) {
+                log("Response received");
+            } );
+
+			
+		}
+	}
+
+response.sendRedirect("../view/autotestclass_home.jag");
+
+%>
+
+
+
+

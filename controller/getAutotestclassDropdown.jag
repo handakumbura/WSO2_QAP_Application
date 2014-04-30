@@ -1,0 +1,24 @@
+<%
+include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_AUTO_TEST_CLASS_DataService/view/autotestclass";
+
+    var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+    var dataAutotest=get(url,"",optionalHeaders);
+    print(dataAutotest);
+    var objAutotest=parse(dataAutotest.data);
+
+    var listAutotest=objAutotest.WSO2_QAP_AUTO_TEST_CLASSCollection.WSO2_QAP_AUTO_TEST_CLASS;
+
+
+    for(var i=0;i<listAutotest.length;i++)
+    {
+    	print('<option value='+listAutotest[i].WSO2_QAP_AUTO_TEST_CLASS_ID+'>'+listAutotest[i].WSO2_QAP_AUTO_TEST_CLASS_NAME+'</option>');
+    	
+    }
+
+
+%>

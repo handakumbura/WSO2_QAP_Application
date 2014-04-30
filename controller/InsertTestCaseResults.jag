@@ -1,0 +1,55 @@
+<%
+include("base64_encode.jag");
+var SERVICE_SECURE_ROOT= session.get("service_secure_root");
+var params = request.getAllParameters("UTF-8");
+var WSO2_QAP_TEST_SCENARIO_ID = parse(request.getParameter("data"));
+//print(WSO2_QAP_TEST_SCENARIO_ID);
+
+var list = params.testcaseId;
+print(list);
+
+//print(list);
+var param = "";
+
+var optionalHeaders = {
+    "Accept": "application/json",
+    "Authorization": "Basic "+base64_encode("admin:admin") };
+	
+
+
+if(!(list instanceof Array)){
+
+    var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/add/testresults";
+    var test_status=document.getElementById("WSO2_QAP_TEST_CASE_STATUS_"+list+"").value;
+    print(test_status);
+    var para='{"_postadd_testresults_for_testcases":{"WSO2_QAP_TEST_CASE_ID" : "'+list+'","WSO2_QAP_TEST_STATUS" : "'+test_status+'","WSO2_QAP_AUTOMATION_TEST_RESULT":"PASSED","WSO2_QAP_TESTED_BY" : "AHSAN"}}';
+//print(para);
+    post(url, para, optionalHeaders, "json", function (data, xhr) {
+        log("Response received");
+    } );
+
+}
+else{
+
+    for (var i=0;i<list.length;i++){
+        var url = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/add/testresults";
+    	var test_status=document.getElementById("WSO2_QAP_TEST_CASE_STATUS_"+list[i]+"").value;
+    	print(test_status);
+    	var para='{"_postadd_testresults_for_testcases":{"WSO2_QAP_TEST_CASE_ID" : "'+list[i]+'","WSO2_QAP_TEST_STATUS" : "'+test_status+'","WSO2_QAP_AUTOMATION_TEST_RESULT":"PASSED","WSO2_QAP_TESTED_BY" : "AHSAN"}}';
+
+        post(url, para, optionalHeaders, "json", function (data, xhr) {
+            log("Response received");
+        } );
+
+
+    }
+
+}
+
+//response.sendRedirect("../view/test_scenario_dashboard.jag?data="+encodeURIComponent(stringify(WSO2_QAP_TEST_SCENARIO_ID)));
+	
+
+%>
+
+
+ 

@@ -1,0 +1,88 @@
+<%
+include("dataServiceCalls.jag");
+
+data = JSON.parse(request.getParameter("dataInput"));
+
+var list = data.TestScenarios.TestScenario;
+var TestSenarioID;
+var lastArtifactLocation="default";
+var artifactID;
+var testCaseID;
+
+
+for(var i=0;i<list.length;i++){
+    artifactID="no";
+    testCaseID="no";
+
+    //check if this is a test scenario
+    if(list[i].test_case_no!=null && list[i].test_case_no.trim()!="" && isNaN(list[i].test_case_no)){
+        TestSenarioID = 0;
+
+
+        TestSenarioID = addTestScenario(list[i].test_case_no, "No details available");
+        continue;
+
+    }
+    //check if test scenario is inserted or not
+    if(TestSenarioID==null){
+        continue;
+    }
+
+    //check if test artifact is defined
+    if(list[i].Test_Artifacts!=null && list[i].Test_Artifacts.trim()!="" ){
+
+        //check if the artifact location is available
+        if(list[i].Test_Artifacts.search("http")!=-1){
+            lastArtifactLocation = list[i].Test_Artifacts; //store location for following -do-'s
+            lastArtifactLocation = lastArtifactLocation.replace(/\r?\n/g, "<br />").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); // escape newline
+
+            artifactID =  addArtifact("artifact fetched from file "+i,lastArtifactLocation,"no description available");
+
+
+        }
+        //check if -do- or -same- is available as the location
+        else if(list[i].Test_Artifacts.trim() == "- do -" || list[i].Test_Artifacts.trim() == "- do"  || list[i].Test_Artifacts.trim() == "- Same -" ){
+
+
+            artifactID =  addArtifact("artifact fetched from file "+i,lastArtifactLocation,"no description available");
+
+
+
+
+        }
+        //anything else is available as artifact description
+        else{
+            artifactID =  addArtifact("artifact fetched from file "+i,"no location available",list[i].Test_Artifacts.replace(/\r?\n/g, "<br />").replace(/"/g, "&quot;").replace(/'/g, "&#39;").trim());
+
+        }
+    }
+
+    if(list[i].test_case_no!=null && list[i].test_case_no.trim()!="" && !isNaN(list[i].test_case_no)){
+
+        if(artifactID="no"){
+            var testcasename = list[i].test_case.replace(/\r?\n/g, "<br />").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+            testCaseID = addTestCase(testcasename,"no", testcasename , "1", "1");
+        } else{
+            var testcasename = list[i].test_case.replace(/\r?\n/g, "<br />").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+            testCaseID = addTestCase(testcasename,"no", testcasename , artifactID, "1");
+
+        }
+
+
+       testscenarioMappingTestcase(TestSenarioID,testCaseID);
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+%>

@@ -1,0 +1,23 @@
+<%
+include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_ARTIFACT_DataService/view/artifacts";
+
+    var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+    var dataArtifacts=get(url,"",optionalHeaders);
+
+    var objArtifacts=parse(dataArtifacts.data);
+
+    var listArtifacts=objArtifacts.WSO2_QAP_ARTIFACTCollection.WSO2_QAP_ARTIFACT;
+
+    for(var i=0;i<listArtifacts.length;i++)
+    {
+    	print('<option value='+listArtifacts[i].WSO2_QAP_ARTIFACT_ID+'>'+listArtifacts[i].WSO2_QAP_ARTIFACT_NAME+'</option>');
+    	
+    }
+
+
+%>

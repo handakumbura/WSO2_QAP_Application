@@ -1,0 +1,104 @@
+<%
+
+    include("base64_encode.jag");
+    var SERVICE_SECURE_ROOT = session.get("service_secure_root");
+    var WSO2_QAP_TEST_SCENARIO_ID = parse(request.getParameter("data"));
+	//print(WSO2_QAP_TEST_SCENARIO_ID);
+    var url  = SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_SCENARIO_DataService/get/testscenario_join_testcase_by_testscenario_id/"+WSO2_QAP_TEST_SCENARIO_ID;
+   	//print(url);
+   	var optionalHeaders = {
+    "Accept": "application/json",
+            "Authorization": "Basic "+base64_encode("admin:admin") };
+
+
+	var data = get(url,"",optionalHeaders);
+	//print(data);
+	var obj = parse(data.data);
+	var list = obj.WSO2_QAP_TEST_CASECollection.WSO2_QAP_TEST_CASE;
+	//print(list);
+
+
+    if(list == null){
+        print('<tr>');
+        print('<td>');
+        print('</td>');
+        print('<td>');
+        print('</td>');
+        print('<td>');
+        print('</td>');
+        print('<td>');
+        print('</td>');
+        print('</tr>');
+    }
+
+    else{ if(!(list instanceof Array)){
+
+        print('<tr>');
+        print('<td style="text-align:center; !important" width="10px">');
+        print('<input name="testcaseId" value="'+list.WSO2_QAP_TEST_CASE_ID+'" onclick="resetSampleVars()" class="chkBox" type="checkbox">');
+        print('</td>');
+        print('<td>');
+
+        var link = "view_testcase.jag?data="+encodeURIComponent(stringify(list.WSO2_QAP_TEST_CASE_ID));
+        //print(list.WSO2_QAP_TEST_CASE_ID);
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list.WSO2_QAP_TEST_CASE_NAME );
+        print('</a>');
+        print('</td>');
+        print('<td>&nbsp;&nbsp;&nbsp;');
+        print("&emsp;&emsp;&emsp;");
+        print(list.WSO2_QAP_DESCRIPTION);
+        print('</td>');
+        print('<td>&nbsp;&nbsp;&nbsp;');
+        print("&emsp;&emsp;&emsp;");
+        print(list.WSO2_QAP_AUTOMATION_STATUS);
+        print('</td>');
+       /* print('<td>&nbsp;&nbsp;&nbsp;');
+        print('<td><select  id="WSO2_QAP_TEST_CASE_STATUS" name="WSO2_QAP_TEST_CASE_STATUS">
+      			<option value="Yes">Yes</option>
+        		<option value="No">No</option>
+        
+        </select> </td> ');
+        print('</td>');*/
+        
+        //print(WSO2_QAP_TEST_CASE_STATUS);
+        print('</tr>');
+        
+    }
+
+else{
+    for (var i=0; i<list.length; i++)
+    {
+        
+        print('<tr>');
+        print('<td style="text-align:center; !important" width="10px">')
+        print('<input name="testcaseId" value="'+list[i].WSO2_QAP_TEST_CASE_ID+'" onclick="resetSampleVars()" class="chkBox" type="checkbox">');
+        print('</td>');
+        print('<td>');
+        var link = "view_testcase.jag?data="+encodeURIComponent(stringify(list[i].WSO2_QAP_TEST_CASE_ID));
+        print('<a href="'+link+'">');
+        print("&emsp;&emsp;&emsp;");
+        print(list[i].WSO2_QAP_TEST_CASE_NAME);
+        print('</a>');
+        print('</td>')
+        print('<td>')
+        print("&emsp;&emsp;&emsp;");
+        print(list[i].WSO2_QAP_DESCRIPTION);
+        print('</td>');
+        print('<td>&nbsp;&nbsp;&nbsp;')
+        print("&emsp;&emsp;&emsp;");
+        print(list[i].WSO2_QAP_AUTOMATION_STATUS);
+        print('</td>');
+        //print('<td>&nbsp;&nbsp;&nbsp;');
+        
+        //print(WSO2_QAP_TEST_CASE_STATUS);
+        print('</tr>');
+        
+
+    }
+}
+}
+
+
+ %>
