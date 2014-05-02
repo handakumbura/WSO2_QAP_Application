@@ -66,7 +66,9 @@
 
 								<li class="normal">
 								<ul class="sub">
-
+									<li><a href="../view/feature_home.jag" class="menu-default"
+										style="background-image: url(../resources/images/list.gif);">List</a>
+									</li>
 									<li><a href="fetch_feature.jag" class="menu-default"
 										style="background-image: url(../resources/images/add.gif);">Fetch Features</a>
 									</li>
