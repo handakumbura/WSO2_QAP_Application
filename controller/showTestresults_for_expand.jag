@@ -28,7 +28,9 @@ else if(!(list_testcaseID instanceof Array))
     {
         print(' <tr>');
         print(' <td>');
-        var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
+     //var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
+//Edited by chaminda as a solution for edit test case issue...
+var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+WSO2_QAP_BUILD_ID;
         print('<a href="'+link+'">');
         print(list_testResultdetails.WSO2_QAP_TEST_CASE_NAME);
         print('</a>');
@@ -45,11 +47,14 @@ else if(!(list_testcaseID instanceof Array))
         print('</tr>');
     }
     else{
+
         for(var k=0;k<list_testResultdetails.length;k++)
         {
             print(' <tr>');
             print(' <td>');
-            var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails[k].WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
+         //var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
+//Edited by chaminda as a solution for edit test case issue...
+var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+WSO2_QAP_BUILD_ID;  
             print('<a href="'+link+'">');
             print(list_testResultdetails[k].WSO2_QAP_TEST_CASE_NAME);
             print('</a>');
@@ -69,6 +74,7 @@ else if(!(list_testcaseID instanceof Array))
     }
 }
 else{
+
     for(var k=0;k<list_testcaseID.length;k++)
     {
         var url_testResultdetails=SERVICE_SECURE_ROOT+"WSO2_QAP_TEST_RESULT_DataService/view/testresults_for_build/"+WSO2_QAP_BUILD_ID+"/"+list_testcaseID[k].WSO2_QAP_TEST_CASE_ID;
@@ -80,8 +86,10 @@ else{
        else if(!(list_testResultdetails instanceof Array)){
             print(' <tr>');
             print(' <td>');
-            var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
-            print('<a href="'+link+'">');
+//var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
+//Edited by chaminda as a solution for edit test case issue...
+var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+WSO2_QAP_BUILD_ID;            
+print('<a href="'+link+'">');
             print(list_testResultdetails.WSO2_QAP_TEST_CASE_NAME);
             print('</a>');
             print('</td>');
@@ -102,7 +110,9 @@ else{
             {
                 print(' <tr>');
                 print(' <td>');
-                var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails[b].WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
+//var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+encodeURIComponent(stringify(WSO2_QAP_BUILD_ID));
+//Edited by chaminda as a solution for edit test case issue...
+var link = "edit_test_result.jag?data="+encodeURIComponent(stringify(list_testResultdetails.WSO2_QAP_TEST_RESULT_ID))+"&build_id="+WSO2_QAP_BUILD_ID;
                 print('<a href="'+link+'">');
                 print(list_testResultdetails[b].WSO2_QAP_TEST_CASE_NAME);
                 print('</a>');
