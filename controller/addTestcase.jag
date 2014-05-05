@@ -1,7 +1,8 @@
 <%
 	include("base64_encode.jag");
 var SERVICE_SECURE_ROOT = session.get("service_secure_root");
-
+//Added by Chaminda..
+var log = new Log();
 var TestCaseName=request.getParameter("WSO2_QAP_TEST_CASE_NAME");
 var status=request.getParameter("WSO2_QAP_TEST_CASE_STATUS");
 var description=request.getParameter("WSO2_QAP_TEST_CASE_DESCRIPTION");
@@ -31,15 +32,12 @@ else if (description==="")
 }
 else{
      post(url, param, optionalHeaders, "json",  function (data, xhr) {
-         log("Response received");
+         log.info("Response received: Test Case Added.");
 
      } );
     response.sendRedirect("../view/testcase_home.jag");
     print("added");
 }
-
-
-
 %>
 
 

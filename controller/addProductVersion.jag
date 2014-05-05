@@ -6,6 +6,7 @@ var SERVICE_SECURE_ROOT = session.get("service_secure_root");
 var product_version = request.getParameter("WSO2_QAP_PRODUCT_VERSION");
 var req_data = request.getParameter("data");
 json_data = parse(decodeURIComponent(req_data));
+var log = new Log();
 
 if(json_data.WSO2_QAP_PRODUCT_ID == null){
 	json_data = parse(decodeURIComponent(json_data));
@@ -29,7 +30,7 @@ if(json_data.WSO2_QAP_PRODUCT_VERSION_ID == null){
 	}
 	else{
 		post(url, param, optionalHeaders, "json", function (data, xhr) {
-      	log("Response received");
+      	log.info("Response received");
    	} );
 
  	response.sendRedirect("../view/product_versions.jag?data="+encodeURIComponent(stringify(json_data)));
@@ -46,7 +47,7 @@ else{
 	}
 	else{
 		put(url, param, optionalHeaders, "json", function (data, xhr) {
-      	log("Response received");
+      	log.info("Response received");
    	} );
 
  	response.sendRedirect("../view/product_versions.jag?data="+encodeURIComponent(stringify(json_data)));

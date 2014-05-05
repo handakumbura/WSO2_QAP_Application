@@ -48,7 +48,7 @@
             <tr>
                <td id="header" colspan="3">
                   <div id="header-div">
-                     <div class="right-logo">QA Portal</div>
+                     <div class="right-logo">Management Console</div>
                      <div class="left-logo">
                         <a href="../index.jag" class="header-home"><img src="../resources/images/1px.gif" width="300px" height="32px"></a>
                      </div>
@@ -140,18 +140,18 @@
                                     
                                     <%
                                     var passjsondata='{"WSO2_QAP_PRODUCT_NAME" : "'+list1.WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION_ID" : "'+WSO2_QAP_PRODUCT_VERSION_ID+'","WSO2_QAP_PRODUCT_VERSION" : "'+list1.WSO2_QAP_PRODUCT_VERSION+'"}';
-                                       var link_redir = "location.href = 'add_testplan.jag?data="+encodeURIComponent(stringify(passjsondata))+"'";
+				
+				       var link_redir = "location.href = 'add_testplan.jag?data="+encodeURIComponent(stringify(passjsondata))+"'";				
                                        var link_redir2 = "location.href = 'version_feature_dashboard.jag?data="+WSO2_QAP_PRODUCT_VERSION_ID+"'";
                                        var link_redir3 = "location.href = 'version_build_dashboard.jag?data="+WSO2_QAP_PRODUCT_VERSION_ID+"'";
                                        var passjsondata='{"WSO2_QAP_PRODUCT_NAME" : "'+list1.WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION" : "'+list1.WSO2_QAP_PRODUCT_VERSION+'"}';
-
                                     %>
                                     <div>
                                        <table>
                                           <tbody>
                                              <tr>
                                                 <td>
-                                                   <input  type="button" value="Add Test Plan" onclick="<% print(link_redir); %>"></label>
+                                                  <input  type="button" value="Add Test Plan" onclick="<% print(link_redir); %>"></label>
                                                    <p>&nbsp;</p>
                                                 </td>
                                                 <td>
