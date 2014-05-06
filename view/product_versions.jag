@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Edited By Chaminda -->
    <head>
       <%
          require("../const.jag");
@@ -115,24 +116,24 @@
                                     <%
                                     var link_redir = "location.href = 'add_product_version.jag?data="+encodeURIComponent(req_data)+"'";
                                     %>
-
+					<!-- Commented/ and added this as a link
                                     <div class="buttonAreaGrid_left" id="buttonAreaGrid_left">
 
                                         <input  type="button" class="button" value="Add Version" onclick="<% print(link_redir); %>"></label>
                                     </div>
-
+					-->	
                                     <p>&nbsp;</p>
                                     <p>&nbsp;</p>
-
                                        <table>
                                           <tbody>
                                              <tr>
                                                 <td><a href="#" onclick="selectAllInThisPage(true);return false;" style="cursor:pointer">Select all in this page</a>&nbsp;<b>|</b>&nbsp;</td>
                                                 <td><a href="#" onclick="selectAllInThisPage(false);return false;" style="cursor:pointer">Select none</a></td>
-                                                <td width="20%">&nbsp;</td>
-                                                <td><a href="#" id="delete1" onclick="deleteProductVersions();return false;">Delete</a></td>
-                                                <td width="10%">&nbsp;</td>
+						<td width="20%">&nbsp;</td>						
+						<td><a href="#" id="add2" onclick="<% print(link_redir); %>">Add Version</a></td>                                                
                                                 <td><a href="#" id="edit" onclick="editProductVersion();return false;">Edit</a></td>
+                                                <td><a href="#" id="delete2" onclick="deleteProductVersions(); return false;">Delete</a></td>
+	
                                              </tr>
                                           </tbody>
                                        </table>
@@ -168,9 +169,9 @@
                                                 <td><a href="#" onclick="selectAllInThisPage(true);return false;" style="cursor:pointer">Select all in this page</a>&nbsp;<b>|</b>&nbsp;</td>
                                                 <td><a href="#" onclick="selectAllInThisPage(false);return false;" style="cursor:pointer">Select none</a></td>
                                                 <td width="20%">&nbsp;</td>
-                                                <td><a href="#" id="delete2" onclick="deleteProductVersions(); return false;">Delete</a></td>
-                                                <td width="10%">&nbsp;</td>
+						<td><a href="#" id="add2" onclick="<% print(link_redir); %>">Add Version</a></td>                                                
                                                 <td><a href="#" id="edit" onclick="editProductVersion();return false;">Edit</a></td>
+						<td><a href="#" id="delete2" onclick="deleteProductVersions(); return false;">Delete</a></td>
                                              </tr>
                                           </tbody>
                                        </table>

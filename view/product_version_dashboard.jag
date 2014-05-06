@@ -139,8 +139,7 @@
 
                                     
                                     <%
-                                    var passjsondata='{"WSO2_QAP_PRODUCT_NAME" : "'+list1.WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION_ID" : "'+WSO2_QAP_PRODUCT_VERSION_ID+'","WSO2_QAP_PRODUCT_VERSION" : "'+list1.WSO2_QAP_PRODUCT_VERSION+'"}';
-				
+                                    var passjsondata='{"WSO2_QAP_PRODUCT_NAME" : "'+list1.WSO2_QAP_PRODUCT_NAME+'","WSO2_QAP_PRODUCT_VERSION_ID" : "'+WSO2_QAP_PRODUCT_VERSION_ID				+'","WSO2_QAP_PRODUCT_VERSION" : "'+list1.WSO2_QAP_PRODUCT_VERSION+'"}';
 				       var link_redir = "location.href = 'add_testplan.jag?data="+encodeURIComponent(stringify(passjsondata))+"'";				
                                        var link_redir2 = "location.href = 'version_feature_dashboard.jag?data="+WSO2_QAP_PRODUCT_VERSION_ID+"'";
                                        var link_redir3 = "location.href = 'version_build_dashboard.jag?data="+WSO2_QAP_PRODUCT_VERSION_ID+"'";
@@ -151,7 +150,7 @@
                                           <tbody>
                                              <tr>
                                                 <td>
-                                                  <input  type="button" value="Add Test Plan" onclick="<% print(link_redir); %>"></label>
+                                                  <input  type="button" id = "AddTestPlan" value="Add Test Plan" onclick="<% print(link_redir); %>"></label>
                                                    <p>&nbsp;</p>
                                                 </td>
                                                 <td>
@@ -170,11 +169,11 @@
                                              <tr>
                                                 <td><a href="#" onclick="selectAllInTestPlanTable(true);return false;" style="cursor:pointer">Select all in this page</a>&nbsp;<b>|</b>&nbsp;</td>
                                                 <td><a href="#" onclick="selectAllInTestPlanTable(false);return false;" style="cursor:pointer">Select none</a></td>
-                                                <td width="20%">&nbsp;</td>
+						<td width="20%">&nbsp;</td>
                                                 <td><a href="#" id="delete1" onclick="deleteVersionTestPlans();return false;">Delete</a></td>
                                                 <td width="10%">&nbsp;</td>
-                                                <td><a href="#" id="edit" onclick="editVersionTestPlans();return false;">Edit</a></td>
-                                             </tr>
+                                                <td><a href="#" id="edit" onclick="editVersionTestPlans();return false;">Edit</a></td>                                        
+					     </tr>
                                           </tbody>
                                        </table>
                                     <!-- <form name="testPlanForm"> -->
@@ -205,7 +204,15 @@
                                           print('<input type="hidden" name="WSO2_QAP_PRODUCT_VERSION" value=\"'+list1.WSO2_QAP_PRODUCT_VERSION +'\">');
                                           %>
                                        </form>
-                                    
+				<!--Added to disable 'Add Test Plan' button when it already added.-->
+                                    <script type="text/javascript">
+                  				$(document).ready(function() {
+						var rowCount = $('#testPlanTable tr').length;	
+						if(rowCount>1){
+						document.getElementById('AddTestPlan').disabled=true;								
+							
+						}});            
+                         	    </script>
                                        <p>&nbsp;</p>
                                        <table>
                                           <tbody>
