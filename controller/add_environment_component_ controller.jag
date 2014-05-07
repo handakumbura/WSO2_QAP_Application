@@ -1,0 +1,27 @@
+<%
+include("base64_encode.jag");
+
+
+var compName = request.getParameter("compName");
+var compDesc = request.getParameter("compDescription");
+
+if(compDesc==null)
+{
+	compDesc ="n/a";
+} 
+var compType = request.getParameter("typeSelection");
+
+var optionalHeadersDb = {
+		        "Accept":"application/json",
+		    	"Authorization": "Basic "+base64_encode('admin:admin') };
+	
+var DB_URL = session.get("service_secure_root");
+
+//using data service to insert env comp
+var insertEnvURL = DB_URL+"WSO2_QAP_Environment_Component/environmentComp";
+var requestParam = {WSO2_QAP_ENVIRONMENT_COMPONENT_NAME: compName, WSO2_QAP_ENVIRONMENT_COMPONENT_DESCRIPTION: compDesc, WSO2_QAP_ENVIRONMENT_COMPONENT_TYPE: compType};
+
+var data=get(insertEnvURL,requestParam,optionalHeadersDb);
+
+
+%>

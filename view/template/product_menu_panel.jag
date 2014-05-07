@@ -85,11 +85,26 @@
 								<ul class="sub">
 
 									<li><a href="sample_home.jag" class="menu-default"
-										style="background-image: url(../resources/images/add.gif);">List</a>
+										style="background-image: url(../resources/images/list.gif);">List</a>
 									</li>
 
                                     <li><a href="add_sample.jag" class="menu-default"
 										style="background-image: url(../resources/images/add.gif);">Add Sample</a>
+									</li>
+
+								</ul>
+							</li>
+							
+							<li id="region1_features_menu" class="menu-header"
+								onclick="mainMenuCollapse(this.childNodes[0])"
+								style="cursor: pointer;"><img src="../resources/images/up-arrow.gif"
+								class="mMenuHeaders" id="region1_sample_menu">Environment</li>
+
+								<li class="normal">
+								<ul class="sub">
+								
+                                    <li><a href="add_environment_component.jag" class="menu-default"
+										style="background-image: url(../resources/images/add.gif);">Add Environment</a>
 									</li>
 
 								</ul>
