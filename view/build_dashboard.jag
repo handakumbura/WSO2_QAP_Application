@@ -189,7 +189,7 @@
                                                 var re_link = "edit_build_dashboard.jag?data=" + WSO2_QAP_BUILD_ID;
 
                                              %>
-                                                <td><a href=<%=re_link%> id="edit" >Add More Test Results</a></td>
+                                                <td><b><a href=<%=re_link%> id="edit" >Update Test Results</a></b></td>
                                              </tr>
                                           </tbody>
                                        </table>

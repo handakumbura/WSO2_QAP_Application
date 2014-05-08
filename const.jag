@@ -1,6 +1,6 @@
 <%
-session.put("root","http://192.168.3.24:9763/qa_portal/");
+session.put("root","http://192.168.3.24:9763/WSO2_QAP_Application/");
 session.put("service_root","http://192.168.3.24:9763/services/");
-session.put("service_secure_root", "https://192.168.3.24:9443/services/");
+session.put("service_secure_root","https://192.168.3.24:9443/services/");
 %>
 

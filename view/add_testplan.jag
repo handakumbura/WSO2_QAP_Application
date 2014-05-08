@@ -162,11 +162,38 @@
 
 															}
 															%>
-															</select>
-															</td>														</tr>
-														</tbody>
-
-
+											</select>
+											</td></tr>
+											<tr class="tableEvenRow">
+											<td class="formRow" width="150" align="center"> Start Date </td>
+											 <td class="formRow"><input type="text" id="WSO2_QAP_START_DATE" name="WSO2_QAP_START_DATE" />
+											<script>
+											$('#WSO2_QAP_START_DATE').datepicker({ dateFormat: 'dd-mm-yy' }).val();
+											</script>
+											</td> 
+											</tr>
+											<tr class="tableEvenRow">
+											<td class="formRow" width="150" align="center"> End Date </td>
+											<td class="formRow"><input type="text" id="WSO2_QAP_END_DATE" name="WSO2_QAP_END_DATE" />
+											<script>
+											$('#WSO2_QAP_END_DATE').datepicker({ dateFormat: 'dd-mm-yy' }).val();
+											</script>
+											</td> 
+											</tr>
+											<tr class="tableEvenRow">
+											<td class="formRow" width="150" align="center"> QA Responsible </td>
+											<td class="formRow"><input type="text" id="WSO2_QAP_RESP_QA" name="WSO2_QAP_RESP_QA" />
+											</td> 
+											</tr>
+											<tr class="tableEvenRow">
+											<td class="formRow" width="150" align="center"> Nature of Testing </td>
+											<td class="formRow" width="150" ><select name="WSO2_QAP_TEST_NATURE" id="WSO2_QAP_TEST_NATURE">
+											<option> ONSITE </option>
+											<option> OFFSHORE </option>
+											</select>	
+											</td> 
+											</tr>
+											</tbody>
 												</table>
 												<table class="styledLeft">
 													<tbody>
