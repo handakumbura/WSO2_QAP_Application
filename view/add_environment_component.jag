@@ -78,7 +78,7 @@
                                  
                                  <div id="workArea">
                                  <!--  -->
-                                    <form name="add_product" action="../controller/add_environment_component_controller.jag" method="post" enctype="multipart/form-data">
+                                    <form name="add_product" action="../controller/add_environment_component_ controller.jag" method="post" enctype="multipart/form-data">
                                        <table class="styledLeft">
                                           <thead>
                                              <tr>
