@@ -23,6 +23,6 @@ var requestParam = {WSO2_QAP_ENVIRONMENT_COMPONENT_NAME: compName, WSO2_QAP_ENVI
 
 var data=get(insertEnvURL,requestParam,optionalHeadersDb);
 
-response.sendRedirect("../view/product_home.jag");
+response.sendRedirect("../view/products_home.jag");
 
 %>
