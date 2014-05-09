@@ -1,13 +1,88 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
    <head>
+      
+      
       <%
-         var name = session.get("username");
+      	include("../controller/base64_encode.jag");
+      	
+      	var name = session.get("username");
          if(name===null){
            response.sendRedirect("login.jag");
          }
          include("template/head.jag");
-         %>
+                  
+         var versionID = request.getParameter("data");
+         
+         
+         
+         
+         
+    	//retrieving env comp data
+		
+         var optionalHeadersDb = {
+                            "Accept":"application/json",
+                        	"Authorization": "Basic "+base64_encode('admin:admin') };
+         
+         var DB_URL = session.get("service_secure_root");
+         var serviceUrl = DB_URL+"WSO2_QAP_Get_Environment_Components/environmentComp";
+         
+         var envCompData = get(serviceUrl,"",optionalHeadersDb);
+         var envCompObj = parse(envCompData.data);
+         var envComponentsRow = envCompObj.ENVIRONMENT_COMPONENT_COLLECTION.ENVIRONMENT_COMPONENT_ROW
+         
+         var osEnvComp = new Array();
+         var browEnvComp = new Array();
+         var jdkEnvComp = new Array();
+         var dbEnvComp = new Array();
+         
+         var osCounter =0;
+         var browCounter =0;
+         var jdkCounter =0;
+         var dbCounter =0;
+         
+         if(envComponentsRow instanceof Array)
+         {
+         	for(var x=0; x < envComponentsRow.length; x++)
+         	{
+         		if(envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_TYPE=="OS")
+         		{
+         			osEnvComp[osCounter]={id: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_ID, name: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_NAME};
+         			osCounter++;
+         		}
+         		else if(envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_TYPE=="BROWSER")
+         		{
+         			browEnvComp[browCounter]={id: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_ID, name: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_NAME};
+         			browCounter++;
+         		}
+         		else if(envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_TYPE=="JDK")
+         		{
+         			jdkEnvComp[jdkCounter]= {id: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_ID, name: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_NAME};
+         			jdkCounter++;
+         		}
+         		else if(envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_TYPE=="DB")
+         		{
+         			dbEnvComp[dbCounter]= {id: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_ID, name: envComponentsRow[x].WSO2_QAP_ENVIRONMENT_COMPONENT_NAME};
+         			dbCounter++;
+         		}
+         		else
+         		{
+         			print("ooops!");
+         		}
+         		        		
+         	}
+         	
+         }
+         else
+         {
+         	print("add more env components");
+         }
+         	
+         
+         
+         
+         
+       %>
    </head>
    <body>
       <noscript>
@@ -42,10 +117,12 @@
       </script>
 
       <input type="hidden" name="versionID" id="versionID" value="<% print(request.getParameter("data")); %>">
+      
+      
       <script type="text/javascript">
 
 			var WSO2_QAP_PRODUCT_VERSION_ID = document.getElementById("versionID").value;
-
+			obj
 			if("null" !== WSO2_QAP_PRODUCT_VERSION_ID){
 
 			$.ajax({
@@ -58,7 +135,7 @@
 					document.getElementById("prodcutVersion").innerHTML = "<input type='hidden' name='WSO2_QAP_PRODUCT_VERSION_ID' value='"+ WSO2_QAP_PRODUCT_VERSION_ID +"' >"+ info.WSO2_QAP_PRODUCT_VERSION+"</input>";
 				});
             }
-
+		  
 
       </script>
 
@@ -118,7 +195,7 @@
 								<div id="middle">
 										<h2>Add Build</h2>
 										<div id="workArea">
-											<form method="post" name="add_build" action="../controller/addBuild.jag" onsubmit="return validateTextInput();return false;">
+											<form method="post" name="add_build" action="../controller/addBuild.jag" >
 												
 												<table class="styledLeft" id="build_data">
 													<tbody>
@@ -129,6 +206,8 @@
 																size="50">
 															
 															</td>
+														
+													<!--  product version is stored in local variable and passed. 	
 														</tr>
                                                             <tr class="tableEvenRow">
 															<td class="formRow">Product<font color="red">*</font>
@@ -145,10 +224,12 @@
 															<td class="formRow">Version<font color="red">*</font></td>
 															<td class="formRow" id="prodcutVersion">
 															<select name="WSO2_QAP_PRODUCT_VERSION_ID" id="WSO2_QAP_PRODUCT_VERSION_ID">
-
+																
 															</select>
 															</td>
 														</tr>
+														
+													-->
 														<tr class="tableEvenRow">
 															<td class="formRow">Build Date<font color="red">*</font>
 															</td>
@@ -159,10 +240,78 @@
   														</script>
 															</td>
 														</tr>
-
+														
+														<tr class="tableOddRow">
+															<td class="formRow">OS<font color="red">*</font></td>
+															<td class="formRow" id="prodcutVersion">
+															<select name="osSelection" id="osSelection">
+															<option selected disabled hidden value=''>select OS</option>
+																	<script type="text/javascript">						
+																		var os = <%=osEnvComp%>;
+																		for (i = 0; i < os.length; i++) {
+																              document.write("<option value="+os[i].id+">");
+																              document.write(os[i].name) ;                  
+																              document.write("</option>");                    
+																    		}       
+																	</script>  
+															</select>
+															</td>
+														</tr>
+														
+														<tr class="tableEvenRow">
+															<td class="formRow">Browser<font color="red">*</font></td>
+															<td class="formRow" id="prodcutVersion">
+															<select name="browserSelection" id="browserSelection">
+															<option selected disabled hidden value=''>select browser</option>
+																	<script type="text/javascript">						
+																		var br = <%=browEnvComp%>;
+																		for (i = 0; i < br.length; i++) {
+																              document.write("<option value="+br[i].id+">");
+																              document.write(br[i].name) ;                  
+																              document.write("</option>");                    
+																    		}       
+																	</script>
+															</select>
+															</td>
+														</tr>
+														
+														<tr class="tableOddRow">
+															<td class="formRow">JDK<font color="red">*</font></td>
+															<td class="formRow" id="prodcutVersion">
+															<select name="jdkSelection" id="jdkSelection">
+															<option selected disabled hidden value=''>select JDK</option>
+																	<script type="text/javascript">						
+																		var jdk = <%=jdkEnvComp%>;
+																		for (i = 0; i < jdk.length; i++) {
+																              document.write("<option value="+jdk[i].id+">");
+																              document.write(jdk[i].name);                  
+																              document.write("</option>");                    
+																    		}       
+																	</script>
+															</select>
+															</td>
+														</tr>
+														
+														<tr class="tableEvenRow">
+															<td class="formRow">DB<font color="red">*</font></td>
+															<td class="formRow" id="prodcutVersion">
+															<select name="dbSelection" id="dbSelection">
+															<option selected disabled hidden value=''>select DB</option>
+																	<script type="text/javascript">						
+																		var db = <%=dbEnvComp%>;
+																		for (i = 0; i < db.length; i++) {
+																              document.write("<option value="+db[i].id+">");
+																              document.write(db[i].name);                  
+																              document.write("</option>");                    
+																    		}       
+																	</script>
+															</select>
+															</td>
+														</tr>
 
 													</tbody>
 												</table>
+												<input type="text" id="versionID" name="versionID" value=<%=versionID%> hidden="true"/>
 												<table class="styledLeft">
 													<tbody>
 														<tr>
@@ -173,7 +322,7 @@
 															</td>
 														</tr>
 													</tbody>
-												</table>
+												</table>												
 											</form>
 										</div>
 									</div>
